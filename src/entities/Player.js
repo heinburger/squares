@@ -9,6 +9,7 @@ export default class Player {
     this.x = window.innerWidth / 2 - this.side / 2
     this.y = window.innerHeight / 2 - this.side / 2
     document.addEventListener('mousemove', this._handleMouseMove)
+    document.addEventListener('touchmove', this._handleTouchMove)
   }
   draw = () => {
     c.fillStyle = this.growing ? 'red' : 'blue'
@@ -49,5 +50,11 @@ export default class Player {
   _handleMouseMove = (e) => {
     this.x = e.clientX - (this.side / 2)
     this.y = e.clientY - (this.side / 2)
+  }
+  _handleTouchMove = (e) => {
+    e.preventDefault()
+    const touch = e.touches[0]
+    this.x = touch.pageX
+    this.y = touch.pageY
   }
 }
