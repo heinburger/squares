@@ -48,13 +48,13 @@ export default class Player {
     })
   }
   _handleMouseMove = (e) => {
-    this.x = e.clientX - (this.side / 2)
-    this.y = e.clientY - (this.side / 2)
+    this.x = e.clientX - this.side / 2
+    this.y = e.clientY - this.side / 2
   }
   _handleTouchMove = (e) => {
     e.preventDefault()
     const touch = e.touches[0]
-    this.x = touch.pageX
-    this.y = touch.pageY
+    this.x = touch.pageX - this.side / 2
+    this.y = (touch.pageY - this.side / 2) + 20
   }
 }
