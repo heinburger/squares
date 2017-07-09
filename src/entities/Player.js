@@ -1,8 +1,11 @@
 import {overlapping} from './_utils'
+import menuStore from '../stores/menu'
 
 export default class Player {
   constructor () {
+    this.active = false
     this.side = 30
+    this.invincible = true
     this.growing = 0
     this.growthMultiplier = 0.1
     this.x = window.innerWidth / 2 - this.side / 2
@@ -11,15 +14,20 @@ export default class Player {
     document.addEventListener('touchmove', this._handleTouchMove)
   }
   draw = (context) => {
-    context.fillStyle = this.growing ? 'red' : 'blue'
-    context.fillRect(this.x, this.y, this.side, this.side)
+    if (this.active) {
+      context.fillStyle = this.invincible ? 'rgba(0, 0, 255, 0.5)' : 'blue'
+      context.fillRect(this.x, this.y, this.side, this.side)
+    }
   }
   update = (context, squares) => {
-    this._checkInteractions(squares)
+    if (!this.invincible) {
+      this._checkInteractions(squares)
+    }
     if (this.growing > 0) {
       this._grow()
     }
     this.draw(context)
+    this._checkGameOver()
   }
   getPosition = () => {
     return {
@@ -45,6 +53,11 @@ export default class Player {
         }
       }
     })
+  }
+  _checkGameOver = () => {
+    if (this.side > window.innerWidth) {
+      menuStore.endGame()
+    }
   }
   _handleMouseMove = (e) => {
     this.x = e.clientX - this.side / 2

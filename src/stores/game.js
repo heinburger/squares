@@ -11,15 +11,21 @@ class Game {
     this.player = new Player()
     this.squares = []
     this.numberOfSquares = parseInt(window.innerWidth / 8, 10)
+    this.requestId = undefined
   }
   newGame = () => {
-    this._generateSquares()
+    window.cancelAnimationFrame(this.requestId)
     this.player = new Player()
+    this._generateSquares()
     this.update()
   }
+  startGame = () => {
+    this.player.active = true
+    setTimeout(() => this.player.invincible = false, 2000)
+  }
   update = () => {
-    window.requestAnimationFrame(this.update)
-    if (!menuStore.paused) {
+    this.requestId = window.requestAnimationFrame(this.update)
+    if (!menuStore.paused && !menuStore.gameOver) {
       this.context.clearRect(0, 0, window.innerWidth, window.innerHeight)
       for (let s of this.squares) {
         if (s.alive) { s.update(this.context) }
@@ -41,6 +47,6 @@ class Game {
   }
 }
 
-const game = new Game()
-export default game
-export const startGame = game.newGame
+const gameStore = new Game()
+export default gameStore
+export const startGame = gameStore.newGame

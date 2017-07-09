@@ -1,5 +1,6 @@
 import {useStrict, observable, action} from 'mobx'
 import timerStore from './timer'
+import gameStore from './game'
 
 useStrict(true)
 class MenuStore {
@@ -8,11 +9,16 @@ class MenuStore {
   @observable instructions = true
 
   @action showInstructions = () => {
+    gameStore.newGame()
+    timerStore.resetTimer()
     this.instructions = true
+    this.gameOver = false
   }
   @action startGame = () => {
     this.instructions = false
     this.gameOver = false
+    gameStore.newGame()
+    gameStore.startGame()
     timerStore.startTimer()
   }
   @action endGame = () => {

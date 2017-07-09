@@ -19,7 +19,7 @@ class Devtools {
     this.frameTimeStamp = Date.now()
   }
 }
-const devtools = new Devtools()
+const devtoolsStore = new Devtools()
 
-export default devtools
-export const startTools = devtools.update
+export default devtoolsStore
+export const startTools = devtoolsStore.update

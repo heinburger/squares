@@ -7,12 +7,12 @@ import timerStore from '../../stores/timer'
 @observer class GameOver extends Component {
   render() {
     const {startGame, showInstructions} = menuStore
-    const {endTime} = timerStore
+    const {finalTime} = timerStore
     return (
       <div className='gameover'>
         <h1>Game over</h1>
         <h4>Final time:</h4>
-        <h2>{endTime}</h2>
+        <h2>{finalTime}</h2>
         <button onClick={startGame}>
           restart
         </button>
