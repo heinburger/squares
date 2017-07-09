@@ -1,5 +1,5 @@
 .timer {
-  position: fixed;
-  left: 50%;
-  top: 0;
+  position: relative;
+  padding-top: 10px;
+  text-align: center;
 }

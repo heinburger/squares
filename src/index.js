@@ -2,8 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 // canvases
-import {startWorld} from './canvases/world'
-// import {startTools} from './canvases/devtools'
+import {startGame} from './stores/game'
+// import {startTools} from './stores/devtools'
 // components
 import Menu from './components/Menu'
 import Timer from './components/Timer'
@@ -11,7 +11,7 @@ import Timer from './components/Timer'
 import './index.css'
 
 // setup world canvas
-startWorld()
+startGame()
 // startTools()
 
 // render components

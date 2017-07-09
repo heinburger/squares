@@ -1,5 +1,5 @@
 import {useStrict, observable, action} from 'mobx'
-import {timerStore} from './timer'
+import timerStore from './timer'
 
 useStrict(true)
 class MenuStore {

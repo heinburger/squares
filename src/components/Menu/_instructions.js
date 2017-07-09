@@ -9,6 +9,7 @@ import menuStore from '../../stores/menu'
     return (
       <div className='instructions'>
         <h2>squares</h2>
+        <p>move around without getting hit by the other squares. when you get hit, you grow. things will accelerate...</p>
         <button onClick={startGame}>
           start
         </button>

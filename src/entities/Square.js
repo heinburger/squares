@@ -1,5 +1,3 @@
-import {worldContext as c} from '../canvases/world'
-
 export default class Square {
   constructor (x, y, dx, dy, side) {
     this.x = x
@@ -10,14 +8,14 @@ export default class Square {
     this.alive = true
     this.color = 'black'
   }
-  draw = () => {
-    c.fillStyle = this.color
-    c.fillRect(this.x, this.y, this.side, this.side)
+  draw = (context) => {
+    context.fillStyle = this.color
+    context.fillRect(this.x, this.y, this.side, this.side)
   }
-  update = () => {
+  update = (context) => {
     this._boundryInteratction()
     this._incrementPosition()
-    this.draw()
+    this.draw(context)
   }
   getPosition = () => {
     return {

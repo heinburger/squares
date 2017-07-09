@@ -1,4 +1,3 @@
-import {worldContext as c} from '../canvases/world'
 import {overlapping} from './_utils'
 
 export default class Player {
@@ -11,16 +10,16 @@ export default class Player {
     document.addEventListener('mousemove', this._handleMouseMove)
     document.addEventListener('touchmove', this._handleTouchMove)
   }
-  draw = () => {
-    c.fillStyle = this.growing ? 'red' : 'blue'
-    c.fillRect(this.x, this.y, this.side, this.side)
+  draw = (context) => {
+    context.fillStyle = this.growing ? 'red' : 'blue'
+    context.fillRect(this.x, this.y, this.side, this.side)
   }
-  update = (squares) => {
+  update = (context, squares) => {
     this._checkInteractions(squares)
     if (this.growing > 0) {
       this._grow()
     }
-    this.draw()
+    this.draw(context)
   }
   getPosition = () => {
     return {
