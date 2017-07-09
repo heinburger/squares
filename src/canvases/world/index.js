@@ -37,4 +37,3 @@ export const startWorld = () => {
 
 
 export const worldContext = c
-export const worldCanvas = canvas

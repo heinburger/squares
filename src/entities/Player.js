@@ -6,6 +6,7 @@ export default class Player {
     this.color = 'blue'
     this.x = window.innerWidth / 2 - this.side / 2
     this.y = window.innerHeight / 2 - this.side / 2
+    document.addEventListener('mousemove', this._handleMouseMove)
   }
   draw = () => {
     c.fillStyle = this.color
@@ -13,5 +14,9 @@ export default class Player {
   }
   update = () => {
     this.draw()
+  }
+  _handleMouseMove = (e) => {
+    this.x = e.clientX - this.side / 2
+    this.y = e.clientY - this.side / 2
   }
 }
