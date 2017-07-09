@@ -1,4 +1,4 @@
-const canvas = document.getElementById('tools')
+const canvas = document.getElementById('devtools')
 const c = canvas.getContext('2d')
 
 let frameTimeStamp = Date.now()
@@ -10,8 +10,8 @@ const getFPS = () => {
   return fps
 }
 
-export const drawTools = () => {
-  window.requestAnimationFrame(drawTools)
+const updateLoop = () => {
+  window.requestAnimationFrame(updateLoop)
   const fps = getFPS()
   c.clearRect(10, 42, 25, 50)
   c.fillStyle = 'red'
@@ -20,3 +20,5 @@ export const drawTools = () => {
   frameCount++
   frameTimeStamp = Date.now()
 }
+
+export const startTools = updateLoop

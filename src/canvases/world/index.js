@@ -1,6 +1,6 @@
-import menuStore from '../stores/menu'
-import Square from '../entities/Square'
-import {drawTools} from './tools'
+import menuStore from '../../stores/menu'
+import Square from '../../entities/Square'
+import Player from '../../entities/Player'
 
 const canvas = document.getElementById('world')
 const c = canvas.getContext('2d')
@@ -15,6 +15,7 @@ times.forEach(() => {
   let dy = (Math.random() - 0.5) * 2
   squares.push(new Square(x, y, dx, dy, side))
 })
+const player = new Player()
 
 const updateLoop = () => {
   window.requestAnimationFrame(updateLoop)
@@ -23,14 +24,17 @@ const updateLoop = () => {
     for (let s of squares) {
       s.update()
     }
+    player.update()
   }
 }
 
-export const initWorld = () => {
+export const startWorld = () => {
   canvas.width = window.innerWidth
   canvas.height = window.innerHeight
+  // add event listeners here?
   updateLoop()
-  drawTools()
-
 }
+
+
 export const worldContext = c
+export const worldCanvas = canvas
