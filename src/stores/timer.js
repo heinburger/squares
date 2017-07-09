@@ -1,4 +1,5 @@
 import {useStrict, computed, observable, action} from 'mobx'
+import {formatTime} from './_utils'
 
 const INTERVAL = 1000 // ms
 
@@ -10,10 +11,11 @@ class TimerStore {
   @observable timeout = null
 
   @computed get timeFormatted () {
-    const minutes = Math.floor((this.time - this.startTime) / 60000) + ''
-    const seconds = Math.floor((this.time - this.startTime) / 1000) % 60 + ''
-    return `
-      ${minutes.length < 2 ? '0' : ''}${minutes}:${seconds.length < 2 ? '0' : ''}${seconds}`
+    return formatTime(this.time - this.startTime)
+  }
+
+  @computed get finalTime () {
+    return formatTime(this.endTime - this.startTime)
   }
 
   @action tick = () => {
@@ -32,6 +34,7 @@ class TimerStore {
   }
 
   @action endTimer = () => {
+    clearTimeout(this.timeout)
     this.endTime = Date.now()
   }
 

@@ -6,12 +6,9 @@ import timerStore from '../../stores/timer'
 
 @observer class Timer extends Component {
   render() {
-    const {timeFormatted, startTimer} = timerStore
+    const {timeFormatted} = timerStore
     return (
-      <div className="Timer">
-        <button onClick={startTimer}>
-          start
-        </button>
+      <div className='timer'>
         <code>{timeFormatted}</code>
       </div>
     )

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 
 // canvases
 import {startWorld} from './canvases/world'
-import {startTools} from './canvases/devtools'
+// import {startTools} from './canvases/devtools'
 // components
 import Menu from './components/Menu'
 import Timer from './components/Timer'
@@ -12,7 +12,7 @@ import './index.css'
 
 // setup world canvas
 startWorld()
-startTools()
+// startTools()
 
 // render components
 ReactDOM.render(<Menu />, document.getElementById('menu'))

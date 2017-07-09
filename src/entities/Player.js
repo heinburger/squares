@@ -55,6 +55,6 @@ export default class Player {
     e.preventDefault()
     const touch = e.touches[0]
     this.x = touch.pageX - this.side / 2
-    this.y = (touch.pageY - this.side / 2) + 20
+    this.y = (touch.pageY - this.side / 2) - 50
   }
 }

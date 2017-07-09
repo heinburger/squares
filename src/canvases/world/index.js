@@ -6,7 +6,7 @@ const canvas = document.getElementById('world')
 const c = canvas.getContext('2d')
 
 const squares = []
-const times = [...Array(window.innerWidth / 8).keys()]
+const times = [...Array(parseInt(window.innerWidth / 8, 10)).keys()]
 times.forEach(() => {
   let side = 15
   let x = Math.random() * (window.innerWidth - side)
