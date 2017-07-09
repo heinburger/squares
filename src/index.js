@@ -6,6 +6,7 @@ import {startWorld} from './canvases/world'
 import {startTools} from './canvases/devtools'
 // components
 import Menu from './components/Menu'
+import Timer from './components/Timer'
 // global styles
 import './index.css'
 
@@ -15,3 +16,4 @@ startTools()
 
 // render components
 ReactDOM.render(<Menu />, document.getElementById('menu'))
+ReactDOM.render(<Timer />, document.getElementById('timer'))

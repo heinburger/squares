@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
+import {observer} from 'mobx-react'
 
 import './styles.css'
 import menuStore from '../../stores/menu'
 
-class Menu extends Component {
+@observer class Menu extends Component {
   render() {
     const {paused, togglePause} = menuStore
     return (

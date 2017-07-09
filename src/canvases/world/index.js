@@ -24,7 +24,7 @@ const updateLoop = () => {
     for (let s of squares) {
       s.update()
     }
-    player.update()
+    player.update(squares)
   }
 }
 
