@@ -13,8 +13,7 @@ class TimerStore {
     const minutes = Math.floor((this.time - this.startTime) / 60000) + ''
     const seconds = Math.floor((this.time - this.startTime) / 1000) % 60 + ''
     return `
-      ${minutes.length < 2 ? '0' : ''}${minutes}:
-      ${seconds.length < 2 ? '0' : ''}${seconds}`
+      ${minutes.length < 2 ? '0' : ''}${minutes}:${seconds.length < 2 ? '0' : ''}${seconds}`
   }
 
   @action tick = () => {

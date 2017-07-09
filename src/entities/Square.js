@@ -7,6 +7,7 @@ export default class Square {
     this.dx = dx
     this.dy = dy
     this.side = side
+    this.alive = true
     this.color = 'black'
   }
   draw = () => {
@@ -20,11 +21,14 @@ export default class Square {
   }
   getPosition = () => {
     return {
-      x1: this.x,
-      x2: this.x + this.side,
-      y1: this.y,
-      y2: this.y - this.side
+      left: this.x,
+      top: this.y,
+      right: this.x + this.side,
+      bottom: this.y + this.side
     }
+  }
+  kill = () => {
+    this.alive = false
   }
   _boundryInteratction = () => {
     if (this.x + this.side > window.innerWidth || this.x < 0) {
