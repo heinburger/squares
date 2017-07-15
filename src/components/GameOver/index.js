@@ -18,12 +18,20 @@ const GameOverDiv = styled.div`
   background-color: ${colors.red};
   color: ${colors.white};
   text-align: center;
-  padding-top: 5%;
-  padding-bottom: 5%;
 `
-const GameOverBig = styled.p`
+
+const GameOverText = styled.h1`
+  font-size: 50px;
+  margin: 40px 0 10px 0;
+`
+
+const GameOverTime = styled.p`
   font-size: 70px;
   margin: 0;
+`
+const GameOverSquares = styled.p`
+  font-size: 30px;
+  margin: 0 0 20px 0;
 `
 
 @observer class GameOver extends Component {
@@ -31,9 +39,9 @@ const GameOverBig = styled.p`
     const {gameTime, numberOfSquares} = gameStore
     return (
       <GameOverDiv>
-        <h1>Game over</h1>
-        <GameOverBig>{gameTime}</GameOverBig>
-        <h2>{numberOfSquares} squares</h2>
+        <GameOverText>Game over</GameOverText>
+        <GameOverTime>{gameTime}</GameOverTime>
+        <GameOverSquares>{numberOfSquares} squares</GameOverSquares>
         <Form />
         <Next />
         <HighScores />

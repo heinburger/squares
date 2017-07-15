@@ -18,6 +18,7 @@ const HighScoresDiv = styled.div`
   max-width: 300px;
   margin: 0 auto;
   display: flex;
+  padding-bottom: 5px;
 `
 const HighScoreCol = styled.div`
   flex: 1 1 ${props => props.basis};
@@ -27,7 +28,7 @@ const HighScoreCol = styled.div`
   render() {
     const {highScores, loadingScores} = gameStore
     return (
-      <div>
+      <div style={{paddingBottom: '50px'}}>
         <HighScoreTitle>
           {loadingScores ? 'loading...' : 'high scores'}
         </HighScoreTitle>

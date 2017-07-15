@@ -5,7 +5,6 @@ import highScoreStore from './highScores'
 useStrict(true)
 class GameStore {
   @observable name = ''
-  @observable paused = false
   @observable showGameOver = false
   @observable showInstructions = true
 
@@ -32,6 +31,10 @@ class GameStore {
 
   @computed get loadingScores () {
     return highScoreStore.requesting
+  }
+
+  @action onPageResize = () => {
+    entityStore.setCanvasSize()
   }
 
   @action onInstructionsClick = () => {
@@ -67,10 +70,6 @@ class GameStore {
 
   @action startGame = () => {
     entityStore.start()
-  }
-
-  @action togglePause = () => {
-    this.paused = !this.paused
   }
 }
 

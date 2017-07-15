@@ -14,10 +14,10 @@ export default class PowerUp {
   }
 
   draw = (context) => {
-    context.strokeStyle = colors.black
+    context.strokeStyle = this.poison ? colors.green : colors.black
     context.strokeWeight = 1
     context.lineWidth = 2.0
-    context.fillStyle = this.poison ? colors.green : colors.brightRed
+    context.fillStyle = colors.brightRed
     const x = this.x
     const y = this.y
     const w = this.size

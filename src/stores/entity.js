@@ -37,6 +37,11 @@ class EntityStore {
     window.cancelAnimationFrame(this.requestId)
   }
 
+  setCanvasSize = () => {
+    this.canvas.width = window.innerWidth
+    this.canvas.height = window.innerHeight
+  }
+
   update = () => {
     this.requestId = window.requestAnimationFrame(this.update)
     this.context.clearRect(0, 0, window.innerWidth, window.innerHeight)

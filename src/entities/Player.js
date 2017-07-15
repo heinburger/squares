@@ -108,14 +108,20 @@ export default class Player {
     this.x = x > window.innerWidth - this.side || x < 0
       ? this.x
       : x
-    this.y = y > window.innerHeight || y < 0
+    this.y = y > window.innerHeight - this.side || y < 0
       ? this.y
       : y
   }
 
   _handleTouchMove = (e) => {
     const touch = e.touches[0]
-    this.x = touch.pageX - this.side / 2
-    this.y = (touch.pageY - this.side / 2) - 50
+    const x = touch.pageX - this.side / 2
+    const y = (touch.pageY - this.side / 2) - 50
+    this.x = x > window.innerWidth - this.side || x < 0
+      ? this.x
+      : x
+    this.y = y > window.innerHeight - this.side || y < 0
+      ? this.y
+      : y
   }
 }

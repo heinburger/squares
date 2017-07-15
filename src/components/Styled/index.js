@@ -27,20 +27,21 @@ export const StyledButton = styled.button`
 export const StyledInput = styled.input`
   appearance: none;
   border-width: 1px;
-  border-color: ${colors.lighterBlue};
+  border-color: ${colors.white};
   border-radius: 5px;
   border-style: solid;
   box-shadow: none;
+  max-width: 190px;
   box-sizing: border-box;
   color: ${colors.blue};
   font-size: 20px;
   margin-bottom: 5px;
   padding: 8px 20px;
   &:hover {
-    border-color: ${colors.blue};
+    border-color: ${colors.lightPurple};
   }
   &:focus {
-    border-color: ${colors.yellow};
+    border-color: ${colors.lightPurple};
     box-shadow: inset 0 1px 3px ${colors.gray};
     outline: none;
   }

@@ -42,13 +42,23 @@ export default class Square {
   }
 
   _boundryInteratction = () => {
-    if (this.x + this.side > window.innerWidth + this.windowExtension ||
-        this.x + this.windowExtension < 0) {
+    if (this.x + this.side > window.innerWidth + this.windowExtension) {
+      this.x = window.innerWidth + this.windowExtension - this.side
       this.dx = -this.dx
     }
 
-    if (this.y + this.side > window.innerHeight + this.windowExtension ||
-        this.y + this.windowExtension < 0) {
+    if (this.x + this.windowExtension < 0) {
+      this.x = 0 - this.windowExtension
+      this.dx = -this.dx
+    }
+
+    if (this.y + this.side > window.innerHeight + this.windowExtension) {
+      this.y = window.innerHeight + this.windowExtension - this.side
+      this.dy = -this.dy
+    }
+
+    if (this.y + this.windowExtension < 0) {
+      this.y = 0 - this.windowExtension
       this.dy = -this.dy
     }
   }
