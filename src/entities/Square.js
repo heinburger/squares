@@ -1,12 +1,15 @@
+import {colors} from '../variables'
+
 export default class Square {
   constructor (x, y, dx, dy, side) {
+    this.windowExtension = 50
     this.x = x
     this.y = y
     this.dx = dx
     this.dy = dy
     this.side = side
     this.alive = true
-    this.color = 'black'
+    this.color = colors.black
   }
   draw = (context) => {
     context.fillStyle = this.color
@@ -29,11 +32,13 @@ export default class Square {
     this.alive = false
   }
   _boundryInteratction = () => {
-    if (this.x + this.side > window.innerWidth || this.x < 0) {
+    if (this.x + this.side > window.innerWidth + this.windowExtension ||
+        this.x + this.windowExtension < 0) {
       this.dx = -this.dx
     }
 
-    if (this.y + this.side > window.innerHeight || this.y < 0) {
+    if (this.y + this.side > window.innerHeight + this.windowExtension ||
+        this.y + this.windowExtension < 0) {
       this.dy = -this.dy
     }
   }

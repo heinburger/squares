@@ -2,6 +2,7 @@ import {useStrict, action, observable} from 'mobx'
 
 import Square from '../entities/Square'
 import Player from '../entities/Player'
+import PowerUp from '../entities/PowerUp'
 import Timer from '../entities/Timer'
 
 useStrict(true)
@@ -13,7 +14,7 @@ class EntityStore {
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight
     this.context = this.canvas.getContext('2d')
-    this.numberOfSquares = parseInt(window.innerWidth / 8, 10)
+    this.numberOfSquares = parseInt((window.innerWidth * window.innerHeight) / 5000, 10)
   }
 
   @action generate = () => {
@@ -35,8 +36,12 @@ class EntityStore {
     for (let s of this.squares) {
       if (s.alive) { s.update(this.context) }
     }
-    this.player.update(this.context, this.squares)
+    this.player.update(this.context, this.squares, this.powerUps)
     this.timer.update(this.context)
+    this._addRandomPowerUp()
+    for (let p of this.powerUps) {
+      if (p.alive) { p.update(this.context) }
+    }
   }
 
   start = () => {
@@ -47,6 +52,7 @@ class EntityStore {
   _generateEntities = () => {
     this.timer = new Timer()
     this.player = new Player(this.endGame)
+    this.powerUps = []
     this.squares = []
     this._generateSquares()
   }
@@ -62,6 +68,12 @@ class EntityStore {
       let dy = (Math.random() - 0.5) * 2
       this.squares.push(new Square(x, y, dx, dy, side))
     })
+  }
+
+  _addRandomPowerUp = () => {
+    if (Math.random() < 0.01) {
+      this.powerUps.push(new PowerUp())
+    }
   }
 }
 

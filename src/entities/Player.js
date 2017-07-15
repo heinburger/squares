@@ -18,12 +18,15 @@ export default class Player {
     context.fillRect(this.x, this.y, this.side, this.side)
   }
 
-  update = (context, squares) => {
+  update = (context, squares, powerUps) => {
     if (!this.invincible) {
-      this._checkInteractions(squares)
+      this._checkSquareInteractions(squares)
+      this._checkPowerUpInteractions(powerUps)
     }
     if (this.growing > 0) {
       this._grow()
+    } else if (this.growing < 0) {
+      this._shrink()
     }
     this.draw(context)
     this._checkGameOver()
@@ -46,12 +49,31 @@ export default class Player {
     this.growing--
   }
 
-  _checkInteractions = (squares) => {
+  _shrink = () => {
+    const growSize = this.side * this.growthMultiplier
+    this.side -= growSize
+    this.x += growSize / 2
+    this.y += growSize / 2
+    this.growing++
+  }
+
+  _checkSquareInteractions = (squares) => {
     squares.slice().forEach((s, i) => {
       if (overlapping(this.getPosition(), s.getPosition())) {
         if (s.alive) {
           this.growing += 1
           s.kill()
+        }
+      }
+    })
+  }
+
+  _checkPowerUpInteractions = (powerUps) => {
+    powerUps.slice().forEach((p, i) => {
+      if (overlapping(this.getPosition(), p.getPosition())) {
+        if (p.alive) {
+          this.growing -= 1
+          p.kill()
         }
       }
     })
@@ -64,8 +86,14 @@ export default class Player {
   }
 
   _handleMouseMove = (e) => {
-    this.x = e.clientX - this.side / 2
-    this.y = e.clientY - this.side / 2
+    const x = e.clientX - this.side / 2
+    const y = e.clientY - this.side / 2
+    this.x = x > window.innerWidth - this.side || x < 0
+      ? this.x
+      : x
+    this.y = y > window.innerHeight || y < 0
+      ? this.y
+      : y
   }
 
   _handleTouchMove = (e) => {
