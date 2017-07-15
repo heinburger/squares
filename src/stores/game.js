@@ -1,8 +1,10 @@
 import {useStrict, observable, computed, action, autorun} from 'mobx'
 import entityStore from './entity'
+import highScoreStore from './highScores'
 
 useStrict(true)
 class GameStore {
+  @observable name = ''
   @observable paused = false
   @observable showGameOver = false
   @observable showInstructions = true
@@ -18,6 +20,14 @@ class GameStore {
 
   @computed get gameTime () {
     return entityStore.timer.formattedTime
+  }
+
+  @computed get highScores () {
+    return highScoreStore.scores
+  }
+
+  @computed get loadingScores () {
+    return highScoreStore.requesting
   }
 
   @action setupGame = () => {
@@ -37,8 +47,21 @@ class GameStore {
     this.startGame()
   }
 
+  @action onNameChange = (e) => {
+    this.name = e.target.value
+  }
+
+  @action onSubmitClick = () => {
+    highScoreStore.postScore({
+      name: this.name,
+      mode: this.mode,
+      time: this.gameTime
+    })
+  }
+
   @action endGame = () => {
     this.showGameOver = true
+    highScoreStore.getScores()
   }
 
   @action startGame = () => {

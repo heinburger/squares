@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import {observer} from 'mobx-react'
 import styled from 'styled-components'
 
+import HighScores from './_highScores'
+
 import gameStore from '../../stores/game'
 import {colors} from '../../variables'
 
@@ -19,7 +21,7 @@ const GameOverDiv = styled.div`
 
 @observer class GameOver extends Component {
   render() {
-    const {onStartGameClick, onInstructionsClick, gameTime} = gameStore
+    const {onStartGameClick, onInstructionsClick, onSubmitClick, gameTime, onNameChange} = gameStore
     return (
       <GameOverDiv>
         <h1>Game over</h1>
@@ -31,6 +33,9 @@ const GameOverDiv = styled.div`
         <button onClick={onInstructionsClick}>
           instructions
         </button>
+        <input type='text' placeholder='name' onChange={onNameChange} />
+        <button onClick={onSubmitClick}>submit</button>
+        <HighScores />
       </GameOverDiv>
     )
   }
