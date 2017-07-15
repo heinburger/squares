@@ -1,4 +1,3 @@
-import menuStore from './menu'
 import Square from '../entities/Square'
 import Player from '../entities/Player'
 
@@ -25,13 +24,11 @@ class Game {
   }
   update = () => {
     this.requestId = window.requestAnimationFrame(this.update)
-    if (!menuStore.paused && !menuStore.gameOver) {
-      this.context.clearRect(0, 0, window.innerWidth, window.innerHeight)
-      for (let s of this.squares) {
-        if (s.alive) { s.update(this.context) }
-      }
-      this.player.update(this.context, this.squares)
+    this.context.clearRect(0, 0, window.innerWidth, window.innerHeight)
+    for (let s of this.squares) {
+      if (s.alive) { s.update(this.context) }
     }
+    this.player.update(this.context, this.squares)
   }
   _generateSquares = () => {
     this.squares = []

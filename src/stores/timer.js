@@ -8,7 +8,7 @@ class TimerStore {
   @observable time = 0
   @observable startTime = 0
   @observable endTime = 0
-  @observable timeout = null
+  timeout = null
 
   @computed get timeFormatted () {
     return formatTime(this.time - this.startTime)
@@ -18,11 +18,9 @@ class TimerStore {
     return formatTime(this.endTime - this.startTime)
   }
 
-  @action tick = () => {
+  @action _tick = () => {
     this.time = Date.now()
-    if (!this.endTime) {
-      this.timeout = setTimeout(() => this.tick(), INTERVAL)
-    }
+    this.timeout = setTimeout(this._tick, INTERVAL)
   }
 
   @action startTimer = () => {
@@ -30,16 +28,18 @@ class TimerStore {
     const start = Date.now()
     this.startTime = start
     this.time = start
-    setTimeout(() => this.tick(), INTERVAL)
+    this.timeout = setTimeout(this._tick, INTERVAL)
   }
 
   @action endTimer = () => {
     clearTimeout(this.timeout)
+    this.timeout = null
     this.endTime = Date.now()
   }
 
   @action resetTimer = () => {
     clearTimeout(this.timeout)
+    this.timeout = null
     this.time = 0
     this.startTime = 0
     this.endTime = 0
