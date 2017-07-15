@@ -1,9 +1,7 @@
 import {observable, action, useStrict} from 'mobx'
 import {get, post} from 'axios'
 
-const BASE_URL = process.env.BASE_URL
-  ? process.env.BASE_URL
-  : 'http://localhost:3030/'
+const BASE_URL = '/'
 
 useStrict(true)
 class HighScoreStore {

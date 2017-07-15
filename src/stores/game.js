@@ -1,4 +1,5 @@
 import {useStrict, observable, computed, action, autorun} from 'mobx'
+
 import entityStore from './entity'
 import highScoreStore from './highScores'
 
