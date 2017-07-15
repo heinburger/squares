@@ -42,7 +42,7 @@ class EntityStore {
       if (p.alive) { p.update(this.context) }
     }
     for (let s of this.squares) {
-      if (s.alive) { s.update(this.context) }
+      if (s.alive) { s.update(this.context, this.player.sick) }
     }
     this.player.update(this.context, this.squares, this.powerUps)
     this.timer.update(this.context)

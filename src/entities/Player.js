@@ -6,6 +6,7 @@ export default class Player {
     this.side = 30
     this.invincible = true
     this.growing = 0
+    this.sick = false
     this.growthMultiplier = 0.1
     this.x = window.innerWidth / 2 - this.side / 2
     this.y = window.innerHeight / 2 - this.side / 2
@@ -19,6 +20,7 @@ export default class Player {
   }
 
   update = (context, squares, powerUps) => {
+    this.sick = false
     if (!this.invincible) {
       this._checkSquareInteractions(squares)
       this._checkPowerUpInteractions(powerUps)
@@ -72,7 +74,11 @@ export default class Player {
     powerUps.slice().forEach((p, i) => {
       if (overlapping(this.getPosition(), p.getPosition())) {
         if (p.alive) {
-          this.growing -= 1
+          if (p.poison) {
+            this.sick = true
+          } else {
+            this.growing -= 1
+          }
           p.kill()
         }
       }

@@ -10,16 +10,24 @@ export default class Square {
     this.side = side
     this.alive = true
     this.color = colors.darkBlue
+    this.speedUpMultiplier = 1.75
+    this.speedUpLength = 5000 // ms
   }
+
   draw = (context) => {
     context.fillStyle = this.color
     context.fillRect(this.x, this.y, this.side, this.side)
   }
-  update = (context) => {
+
+  update = (context, shouldSpeedUp) => {
     this._boundryInteratction()
     this._incrementPosition()
+    if (shouldSpeedUp) {
+      this._speedUp()
+    }
     this.draw(context)
   }
+
   getPosition = () => {
     return {
       left: this.x,
@@ -28,9 +36,11 @@ export default class Square {
       bottom: this.y + this.side
     }
   }
+
   kill = () => {
     this.alive = false
   }
+
   _boundryInteratction = () => {
     if (this.x + this.side > window.innerWidth + this.windowExtension ||
         this.x + this.windowExtension < 0) {
@@ -42,8 +52,20 @@ export default class Square {
       this.dy = -this.dy
     }
   }
+
   _incrementPosition = () => {
     this.x += this.dx
     this.y += this.dy
+  }
+
+  _speedUp = () => {
+    this.dx = this.dx * this.speedUpMultiplier
+    this.dy = this.dy * this.speedUpMultiplier
+    setTimeout(() => this._slowDown(), this.speedUpLength)
+  }
+
+  _slowDown = () => {
+    this.dx = this.dx / this.speedUpMultiplier
+    this.dy = this.dy / this.speedUpMultiplier
   }
 }

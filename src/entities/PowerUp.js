@@ -3,6 +3,7 @@ import {colors} from '../variables'
 export default class PowerUp {
   constructor () {
     this.size = 20
+    this.poison = Math.random() > 0.99 ? false : true
     this.lifeSpan = 10 * 1000
     this.x = window.innerWidth * Math.random() - this.size
     this.y = window.innerHeight * Math.random() - this.size
@@ -16,7 +17,7 @@ export default class PowerUp {
     context.strokeStyle = colors.black
     context.strokeWeight = 1
     context.lineWidth = 2.0
-    context.fillStyle = colors.brightRed
+    context.fillStyle = this.poison ? colors.green : colors.brightRed
     const x = this.x
     const y = this.y
     const w = this.size
