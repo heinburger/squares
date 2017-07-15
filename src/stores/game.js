@@ -4,13 +4,13 @@ import highScoreStore from './highScores'
 
 useStrict(true)
 class GameStore {
-  @observable name = undefined
+  @observable name = ''
   @observable paused = false
   @observable showGameOver = false
   @observable showInstructions = true
 
   constructor () {
-    this.setupGame()
+    entityStore.generate()
     autorun(() => {
       if (entityStore.dead) {
         this.endGame()
@@ -34,14 +34,10 @@ class GameStore {
     return highScoreStore.requesting
   }
 
-  @action setupGame = () => {
+  @action onInstructionsClick = () => {
     this.showInstructions = true
     this.showGameOver = false
     entityStore.generate()
-  }
-
-  @action onInstructionsClick = () => {
-    this.setupGame()
   }
 
   @action onStartGameClick = () => {

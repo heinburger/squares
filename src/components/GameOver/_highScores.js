@@ -1,8 +1,18 @@
 import React, {Component} from 'react'
 import {observer} from 'mobx-react'
-import styled from 'styled-components'
+import styled, {keyframes} from 'styled-components'
 
 import gameStore from '../../stores/game'
+
+const Blink = keyframes`
+  0% { opacity: 1.0; }
+  50% { opacity: 0.0; }
+  100% { opacity: 1.0; }
+`
+
+const HighScoreTitle = styled.h2`
+  animation: 0.5s ${Blink} linear infinite;
+`
 
 const HighScoresDiv = styled.div`
   max-width: 300px;
@@ -10,7 +20,7 @@ const HighScoresDiv = styled.div`
   display: flex;
 `
 const HighScoreCol = styled.div`
-  flex: 1 1 33%;
+  flex: 1 1 ${props => props.basis};
 `
 
 @observer class HighScores extends Component {
@@ -18,13 +28,20 @@ const HighScoreCol = styled.div`
     const {highScores, loadingScores} = gameStore
     return (
       <div>
-        <div>{loadingScores ? 'loading...' : 'high scores'}</div>
+        <HighScoreTitle>
+          {loadingScores ? 'loading...' : 'high scores'}
+        </HighScoreTitle>
+        <HighScoresDiv>
+          <HighScoreCol basis={'20%'}><b>time</b></HighScoreCol>
+          <HighScoreCol basis={'60%'}><b>name</b></HighScoreCol>
+          <HighScoreCol basis={'20%'}><b>squares</b></HighScoreCol>
+        </HighScoresDiv>
         {highScores.map((score, i) => {
           return (
             <HighScoresDiv key={i}>
-              <HighScoreCol>{score.time}</HighScoreCol>
-              <HighScoreCol>{score.name}</HighScoreCol>
-              <HighScoreCol>{score.mode}</HighScoreCol>
+              <HighScoreCol basis={'30%'}>{score.time}</HighScoreCol>
+              <HighScoreCol basis={'50%'}>{score.name}</HighScoreCol>
+              <HighScoreCol basis={'20%'}>{score.number}</HighScoreCol>
             </HighScoresDiv>
           )
         })}

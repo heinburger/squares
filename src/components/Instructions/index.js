@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import gameStore from '../../stores/game'
 import {colors} from '../../variables'
 
+import {StyledButton} from '../Styled'
+
 const InstructionsDiv = styled.div`
   position: fixed;
   top: 20%;
@@ -25,9 +27,7 @@ const InstructionsDiv = styled.div`
       <InstructionsDiv>
         <h2>squares</h2>
         <p>move around without getting hit by the other squares. when you get hit, you grow. things will accelerate...</p>
-        <button onClick={onStartGameClick}>
-          start
-        </button>
+        <StyledButton primary onClick={onStartGameClick}>start</StyledButton>
       </InstructionsDiv>
     )
   }

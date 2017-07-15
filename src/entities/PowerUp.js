@@ -3,7 +3,7 @@ import {colors} from '../variables'
 export default class PowerUp {
   constructor () {
     this.size = 20
-    this.poison = Math.random() > 0.99 ? false : true
+    this.poison = Math.random() > 0.2 ? false : true
     this.lifeSpan = 10 * 1000
     this.x = window.innerWidth * Math.random() - this.size
     this.y = window.innerHeight * Math.random() - this.size

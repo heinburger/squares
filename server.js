@@ -48,7 +48,7 @@ app.post('/submit', (req, res) => {
 app.get('/scores', (req, res) => {
   Score.find()
     .sort('-time')
-    .select('time name mode date')
+    .select('time name number date')
     .exec((err, scores) => {
       if (err) {
         res.send(err)

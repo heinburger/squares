@@ -3,44 +3,39 @@ import {observer} from 'mobx-react'
 import styled from 'styled-components'
 
 import HighScores from './_highScores'
+import Next from './_next'
+import Form from './_form'
 
 import gameStore from '../../stores/game'
 import {colors} from '../../variables'
 
 const GameOverDiv = styled.div`
-  position: fixed;
+  position: absolute;
+  min-height: 100vh;
   top: 0;
   right: 0;
-  bottom: 0;
   left: 0;
   background-color: ${colors.red};
   color: ${colors.white};
   text-align: center;
-  padding-top: 10%;
+  padding-top: 5%;
+  padding-bottom: 5%;
+`
+const GameOverBig = styled.p`
+  font-size: 70px;
+  margin: 0;
 `
 
 @observer class GameOver extends Component {
   render() {
-    const {onStartGameClick, onInstructionsClick, onSubmitClick, gameTime, numberOfSquares, onNameChange, name} = gameStore
+    const {gameTime, numberOfSquares} = gameStore
     return (
       <GameOverDiv>
-        <h2>Game over</h2>
-        <p>Final time:</p>
-        <h1>{gameTime}</h1>
-        <p>number of squares:</p>
-        <h2>{numberOfSquares}</h2>
-        <div>
-          <input type='text' placeholder='name' value={name} onChange={onNameChange} />
-          <button onClick={onSubmitClick}>submit</button>
-        </div>
-        <div>
-          <button onClick={onStartGameClick}>
-            restart
-          </button>
-          <button onClick={onInstructionsClick}>
-            instructions
-          </button>
-        </div>
+        <h1>Game over</h1>
+        <GameOverBig>{gameTime}</GameOverBig>
+        <h2>{numberOfSquares} squares</h2>
+        <Form />
+        <Next />
         <HighScores />
       </GameOverDiv>
     )

@@ -4,7 +4,6 @@ import {colors} from '../variables'
 export default class Player {
   constructor (kill) {
     this.kill = kill
-    this.active = false
     this.side = 30
     this.invincible = true
     this.growing = 0
@@ -20,7 +19,7 @@ export default class Player {
   }
 
   draw = (context) => {
-    if (this.invincible && this.active) {
+    if (this.invincible) {
       this.altCount++
       context.fillStyle = this.altCount % this.altMod < this.altMod * 0.5
         ? colors.purple
@@ -115,7 +114,6 @@ export default class Player {
   }
 
   _handleTouchMove = (e) => {
-    e.preventDefault()
     const touch = e.touches[0]
     this.x = touch.pageX - this.side / 2
     this.y = (touch.pageY - this.side / 2) - 50
