@@ -15,6 +15,11 @@ class EntityStore {
     this.canvas.height = window.innerHeight
     this.context = this.canvas.getContext('2d')
     this.numberOfSquares = parseInt((window.innerWidth * window.innerHeight) / 5000, 10)
+    this.squareSize = 15
+    this.velocityXMultiplier = 5
+    this.velocityYMultiplier = 2
+    this.addPowerUpChance = 0.005
+    this.addSquareChange = 0.01
   }
 
   @action generate = () => {
@@ -33,15 +38,17 @@ class EntityStore {
   update = () => {
     this.requestId = window.requestAnimationFrame(this.update)
     this.context.clearRect(0, 0, window.innerWidth, window.innerHeight)
+    for (let p of this.powerUps) {
+      if (p.alive) { p.update(this.context) }
+    }
     for (let s of this.squares) {
       if (s.alive) { s.update(this.context) }
     }
     this.player.update(this.context, this.squares, this.powerUps)
     this.timer.update(this.context)
+
     this._addRandomPowerUp()
-    for (let p of this.powerUps) {
-      if (p.alive) { p.update(this.context) }
-    }
+    this._addRandomSquare()
   }
 
   start = () => {
@@ -60,19 +67,27 @@ class EntityStore {
   _generateSquares = () => {
     this.squares = []
     const times = [...Array(this.numberOfSquares).keys()]
-    times.forEach(() => {
-      let side = 15
-      let x = Math.random() * (window.innerWidth - side)
-      let y = Math.random() * (window.innerHeight - side)
-      let dx = (Math.random() - 0.5) * 5
-      let dy = (Math.random() - 0.5) * 2
-      this.squares.push(new Square(x, y, dx, dy, side))
-    })
+    times.forEach(() => this.squares.push(this._genereateOneSquare()))
+  }
+
+  _genereateOneSquare = () => {
+    const side = this.squareSize
+    const x = Math.random() * (window.innerWidth - side)
+    const y = Math.random() * (window.innerHeight - side)
+    const dx = (Math.random() - 0.5) * this.velocityXMultiplier
+    const dy = (Math.random() - 0.5) * this.velocityYMultiplier
+    return new Square(x, y, dx, dy, side)
   }
 
   _addRandomPowerUp = () => {
-    if (Math.random() < 0.01) {
+    if (Math.random() < this.addPowerUpChance) {
       this.powerUps.push(new PowerUp())
+    }
+  }
+
+  _addRandomSquare = () => {
+    if (Math.random() < this.addPowerUpChance) {
+      this.squares.push(this._genereateOneSquare())
     }
   }
 }

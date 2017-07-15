@@ -9,7 +9,7 @@ export default class Square {
     this.dy = dy
     this.side = side
     this.alive = true
-    this.color = colors.black
+    this.color = colors.darkBlue
   }
   draw = (context) => {
     context.fillStyle = this.color

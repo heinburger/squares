@@ -4,7 +4,7 @@ import highScoreStore from './highScores'
 
 useStrict(true)
 class GameStore {
-  @observable name = ''
+  @observable name = undefined
   @observable paused = false
   @observable showGameOver = false
   @observable showInstructions = true
@@ -20,6 +20,10 @@ class GameStore {
 
   @computed get gameTime () {
     return entityStore.timer.formattedTime
+  }
+
+  @computed get numberOfSquares () {
+    return entityStore.squares.length
   }
 
   @computed get highScores () {
@@ -55,7 +59,8 @@ class GameStore {
     highScoreStore.postScore({
       name: this.name,
       mode: this.mode,
-      time: this.gameTime
+      time: this.gameTime,
+      number: this.numberOfSquares
     })
   }
 

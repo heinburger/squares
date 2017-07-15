@@ -21,20 +21,26 @@ const GameOverDiv = styled.div`
 
 @observer class GameOver extends Component {
   render() {
-    const {onStartGameClick, onInstructionsClick, onSubmitClick, gameTime, onNameChange} = gameStore
+    const {onStartGameClick, onInstructionsClick, onSubmitClick, gameTime, numberOfSquares, onNameChange, name} = gameStore
     return (
       <GameOverDiv>
-        <h1>Game over</h1>
-        <h4>Final time:</h4>
-        <h2>{gameTime}</h2>
-        <button onClick={onStartGameClick}>
-          restart
-        </button>
-        <button onClick={onInstructionsClick}>
-          instructions
-        </button>
-        <input type='text' placeholder='name' onChange={onNameChange} />
-        <button onClick={onSubmitClick}>submit</button>
+        <h2>Game over</h2>
+        <p>Final time:</p>
+        <h1>{gameTime}</h1>
+        <p>number of squares:</p>
+        <h2>{numberOfSquares}</h2>
+        <div>
+          <input type='text' placeholder='name' value={name} onChange={onNameChange} />
+          <button onClick={onSubmitClick}>submit</button>
+        </div>
+        <div>
+          <button onClick={onStartGameClick}>
+            restart
+          </button>
+          <button onClick={onInstructionsClick}>
+            instructions
+          </button>
+        </div>
         <HighScores />
       </GameOverDiv>
     )

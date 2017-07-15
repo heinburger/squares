@@ -16,6 +16,7 @@ var scoreSchema = new mongoose.Schema({
   name: { type: String, default: 'unknown' },
   mode: { type: String, default: 'normal' },
   time: String,
+  number: Number,
   date: { type: Date, default: Date.now }
 })
 var Score = mongoose.model('Score', scoreSchema)
