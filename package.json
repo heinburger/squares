@@ -18,12 +18,12 @@
     "styled-components": "^2.1.1"
   },
   "devDependencies": {},
-  "homepage": "https://heinburger.github.io/squares",
+  "homepage": "http://dawdle.herokuapp.com/",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "start": "react-scripts start",
-    "start-heroku": "npm run build && node ./server.js",
+    "start:dev": "react-scripts start",
+    "start": "npm run build && node ./server.js",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

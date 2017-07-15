@@ -18,10 +18,11 @@ const HighScoresDiv = styled.div`
   max-width: 300px;
   margin: 0 auto;
   display: flex;
+  text-align: right;
   padding-bottom: 5px;
 `
 const HighScoreCol = styled.div`
-  flex: 1 1 ${props => props.basis};
+  flex: 0 0 ${props => props.basis};
 `
 
 @observer class HighScores extends Component {
@@ -33,15 +34,15 @@ const HighScoreCol = styled.div`
           {loadingScores ? 'loading...' : 'high scores'}
         </HighScoreTitle>
         <HighScoresDiv>
-          <HighScoreCol basis={'20%'}><b>time</b></HighScoreCol>
-          <HighScoreCol basis={'60%'}><b>name</b></HighScoreCol>
+          <HighScoreCol basis={'50%'}><b>name</b></HighScoreCol>
+          <HighScoreCol basis={'30%'}><b>time</b></HighScoreCol>
           <HighScoreCol basis={'20%'}><b>squares</b></HighScoreCol>
         </HighScoresDiv>
         {highScores.map((score, i) => {
           return (
             <HighScoresDiv key={i}>
-              <HighScoreCol basis={'30%'}>{score.time}</HighScoreCol>
               <HighScoreCol basis={'50%'}>{score.name}</HighScoreCol>
+              <HighScoreCol basis={'30%'}>{score.time}</HighScoreCol>
               <HighScoreCol basis={'20%'}>{score.number}</HighScoreCol>
             </HighScoresDiv>
           )

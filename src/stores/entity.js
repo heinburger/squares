@@ -24,6 +24,7 @@ class EntityStore {
   }
 
   @action generate = () => {
+    this.setCanvasSize()
     this.playerActive = false
     this.dead = false
     this.time = 0

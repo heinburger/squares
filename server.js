@@ -1,7 +1,5 @@
 var express = require('express')
-var http = require('http')
 var path = require('path')
-var cors = require('cors')
 var bodyParser = require('body-parser')
 var mongoose = require('mongoose')
 
@@ -9,8 +7,6 @@ var PORT = process.env.PORT || 3030
 var MONGODB_URI = process.env.MONGODB_URI
   ? process.env.MONGODB_URI + '/scores'
   : 'mongodb://localhost/scores'
-
-mongoose.connect(MONGODB_URI)
 
 var scoreSchema = new mongoose.Schema({
   name: { type: String, default: 'unknown' },
@@ -22,15 +18,29 @@ var scoreSchema = new mongoose.Schema({
 var Score = mongoose.model('Score', scoreSchema)
 
 var app = express()
-app.use(cors())
-app.use(bodyParser.urlencoded({extended:false}));
+app.use('/', express.static(path.join(__dirname, 'build')))
+
+app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(__dirname + '/build'))
-}
+mongoose.connect(MONGODB_URI)
 
-app.post('/submit', (req, res) => {
+var router = express.Router()
+
+router.get('/scores', (req, res) => {
+  Score.find()
+    .sort('-time')
+    .select('time name number date')
+    .exec((err, scores) => {
+      if (err) {
+        res.send(err)
+      } else {
+        res.jsonp(scores)
+      }
+    })
+})
+
+router.post('/submit', (req, res) => {
   if (req.body) {
     var score = new Score(req.body)
     score.save((err) => {
@@ -45,17 +55,6 @@ app.post('/submit', (req, res) => {
   }
 })
 
-app.get('/scores', (req, res) => {
-  Score.find()
-    .sort('-time')
-    .select('time name number date')
-    .exec((err, scores) => {
-      if (err) {
-        res.send(err)
-      } else {
-        res.jsonp(scores)
-      }
-    })
-})
+app.use('/api', router)
 
 app.listen(PORT)

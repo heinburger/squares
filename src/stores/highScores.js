@@ -1,7 +1,7 @@
 import {observable, action, useStrict} from 'mobx'
 import {get, post} from 'axios'
 
-const BASE_URL = '/'
+const BASE_URL = '/api/'
 
 useStrict(true)
 class HighScoreStore {
