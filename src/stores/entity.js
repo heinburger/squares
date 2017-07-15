@@ -1,27 +1,32 @@
+import {useStrict, action, observable} from 'mobx'
+
 import Square from '../entities/Square'
 import Player from '../entities/Player'
 
-class Game {
+useStrict(true)
+class EntityStore {
+  @observable dead = false
+
   constructor () {
-    this.canvas = document.getElementById('game')
+    this.canvas = document.getElementById('entities')
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight
     this.context = this.canvas.getContext('2d')
-    this.player = new Player()
-    this.squares = []
     this.numberOfSquares = parseInt(window.innerWidth / 8, 10)
-    this.requestId = undefined
   }
-  newGame = () => {
+
+  @action startGame = () => {
+    this.dead = false
     window.cancelAnimationFrame(this.requestId)
-    this.player = new Player()
-    this._generateSquares()
+    this._generateEntities()
     this.update()
   }
-  startGame = () => {
-    this.player.active = true
-    setTimeout(() => this.player.invincible = false, 2000)
+
+  @action endGame = () => {
+    this.dead = true
+    window.cancelAnimationFrame(this.requestId)
   }
+
   update = () => {
     this.requestId = window.requestAnimationFrame(this.update)
     this.context.clearRect(0, 0, window.innerWidth, window.innerHeight)
@@ -30,6 +35,17 @@ class Game {
     }
     this.player.update(this.context, this.squares)
   }
+
+  activatePlayer = () => {
+    setTimeout(() => this.player.invincible = false, 2000)
+  }
+
+  _generateEntities = () => {
+    this.player = new Player(this.endGame)
+    this.squares = []
+    this._generateSquares()
+  }
+
   _generateSquares = () => {
     this.squares = []
     const times = [...Array(this.numberOfSquares).keys()]
@@ -44,6 +60,5 @@ class Game {
   }
 }
 
-const gameStore = new Game()
-export default gameStore
-export const startGame = gameStore.newGame
+const entityStore = new EntityStore()
+export default entityStore

@@ -9,7 +9,8 @@
     "mobx-react": "^4.2.2",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "react-event-listener": "^0.4.5"
+    "react-event-listener": "^0.4.5",
+    "styled-components": "^2.1.1"
   },
   "devDependencies": {},
   "homepage": "https://heinburger.github.io/squares",

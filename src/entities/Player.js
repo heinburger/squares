@@ -1,9 +1,8 @@
 import {overlapping} from './_utils'
-import menuStore from '../stores/menu'
 
 export default class Player {
-  constructor () {
-    this.active = false
+  constructor (kill) {
+    this.kill = kill
     this.side = 30
     this.invincible = true
     this.growing = 0
@@ -13,12 +12,12 @@ export default class Player {
     document.addEventListener('mousemove', this._handleMouseMove)
     document.addEventListener('touchmove', this._handleTouchMove)
   }
+
   draw = (context) => {
-    if (this.active) {
-      context.fillStyle = this.invincible ? 'rgba(0, 0, 255, 0.5)' : 'blue'
-      context.fillRect(this.x, this.y, this.side, this.side)
-    }
+    context.fillStyle = this.invincible ? 'rgba(0, 0, 255, 0.5)' : 'blue'
+    context.fillRect(this.x, this.y, this.side, this.side)
   }
+
   update = (context, squares) => {
     if (!this.invincible) {
       this._checkInteractions(squares)
@@ -29,6 +28,7 @@ export default class Player {
     this.draw(context)
     this._checkGameOver()
   }
+
   getPosition = () => {
     return {
       left: this.x,
@@ -37,6 +37,7 @@ export default class Player {
       bottom: this.y + this.side
     }
   }
+
   _grow = () => {
     const growSize = this.side * this.growthMultiplier
     this.side += growSize
@@ -44,6 +45,7 @@ export default class Player {
     this.y -= growSize / 2
     this.growing--
   }
+
   _checkInteractions = (squares) => {
     squares.slice().forEach((s, i) => {
       if (overlapping(this.getPosition(), s.getPosition())) {
@@ -54,15 +56,18 @@ export default class Player {
       }
     })
   }
+
   _checkGameOver = () => {
     if (this.side > window.innerWidth) {
-      menuStore.endGame()
+      this.kill()
     }
   }
+
   _handleMouseMove = (e) => {
     this.x = e.clientX - this.side / 2
     this.y = e.clientY - this.side / 2
   }
+
   _handleTouchMove = (e) => {
     e.preventDefault()
     const touch = e.touches[0]

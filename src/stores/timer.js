@@ -14,10 +14,6 @@ class TimerStore {
     return formatTime(this.time - this.startTime)
   }
 
-  @computed get finalTime () {
-    return formatTime(this.endTime - this.startTime)
-  }
-
   @action _tick = () => {
     this.time = Date.now()
     this.timeout = setTimeout(this._tick, INTERVAL)
