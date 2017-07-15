@@ -22,6 +22,10 @@ export const StyledButton = styled.button`
     color: ${props => props.primary ? colors.lightPurple : colors.white};
     background-color: ${props => props.primary ? colors.purple : colors.gray};
   }
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 `
 
 export const StyledInput = styled.input`

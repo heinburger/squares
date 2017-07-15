@@ -25,6 +25,22 @@ class GameStore {
     return entityStore.squares.length
   }
 
+  @computed get submitError () {
+    return highScoreStore.errors.has('post')
+  }
+
+  @computed get getScoresError () {
+    return highScoreStore.errors.has('get')
+  }
+
+  @computed get disableSubmit () {
+    return highScoreStore.posting || highScoreStore.scoreAccepted
+  }
+
+  @computed get scoreSubmitted () {
+    return !highScoreStore.posting && highScoreStore.scoreAccepted
+  }
+
   @computed get highScores () {
     return highScoreStore.scores
   }
@@ -40,12 +56,14 @@ class GameStore {
   @action onInstructionsClick = () => {
     this.showInstructions = true
     this.showGameOver = false
+    highScoreStore.scoreAccepted = false
     entityStore.generate()
   }
 
   @action onStartGameClick = () => {
     this.showInstructions = false
     this.showGameOver = false
+    highScoreStore.scoreAccepted = false
     entityStore.generate()
     this.startGame()
   }

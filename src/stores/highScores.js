@@ -9,10 +9,13 @@ useStrict(true)
 class HighScoreStore {
   scores = observable.shallowArray()
   @observable requesting = false
+  @observable posting = false
+  @observable scoreAccepted = false
   @observable receivedOnce = false
-  @observable error = null
+  errors = observable.shallowMap()
 
   @action request = () => {
+    this.errors.delete('get')
     this.error = null
     this.requesting = true
   }
@@ -25,7 +28,7 @@ class HighScoreStore {
 
   @action failure = (err) => {
     this.requesting = false
-    this.error = err || 'something happened..'
+    this.errors.set('get', err || 'something happened..')
   }
 
   @action getScores = () => {
@@ -35,8 +38,27 @@ class HighScoreStore {
       .catch((err) => this.failure(err))
   }
 
+  @action requestPost = () => {
+    this.errors.delete('post')
+    this.posting = true
+  }
+
+  @action successPost = (score) => {
+    this.posting = false
+    this.scoreAccepted = true
+    this.scores.push(score)
+  }
+
+  @action failure = (err) => {
+    this.posting = false
+    this.errors.set('post', err || 'something happened..')
+  }
+
   @action postScore = (data) => {
+    this.requestPost()
     post(BASE_URL + 'submit', data)
+      .then((resp) => this.successPost(resp))
+      .catch((err) => this.failurePost(err))
   }
 }
 
