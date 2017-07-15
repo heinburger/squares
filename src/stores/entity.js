@@ -2,6 +2,7 @@ import {useStrict, action, observable} from 'mobx'
 
 import Square from '../entities/Square'
 import Player from '../entities/Player'
+import Timer from '../entities/Timer'
 
 useStrict(true)
 class EntityStore {
@@ -15,8 +16,9 @@ class EntityStore {
     this.numberOfSquares = parseInt(window.innerWidth / 8, 10)
   }
 
-  @action startGame = () => {
+  @action generate = () => {
     this.dead = false
+    this.time = 0
     window.cancelAnimationFrame(this.requestId)
     this._generateEntities()
     this.update()
@@ -34,13 +36,16 @@ class EntityStore {
       if (s.alive) { s.update(this.context) }
     }
     this.player.update(this.context, this.squares)
+    this.timer.update(this.context)
   }
 
-  activatePlayer = () => {
+  start = () => {
+    this.timer.start()
     setTimeout(() => this.player.invincible = false, 2000)
   }
 
   _generateEntities = () => {
+    this.timer = new Timer()
     this.player = new Player(this.endGame)
     this.squares = []
     this._generateSquares()

@@ -3,16 +3,14 @@ import {observer} from 'mobx-react'
 
 import Instructions from './Instructions'
 import GameOver from './GameOver'
-import Timer from './Timer'
 
-import combinedStore from '../stores/combined'
+import gameStore from '../stores/game'
 
 @observer class Game extends Component {
   render() {
-    const {showInstructions, showGameOver} = combinedStore
+    const {showInstructions, showGameOver} = gameStore
     return (
       <div>
-        <Timer />
         {showGameOver && <GameOver />}
         {showInstructions && <Instructions />}
       </div>

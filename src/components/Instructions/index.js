@@ -2,7 +2,8 @@ import React, {Component} from 'react'
 import {observer} from 'mobx-react'
 import styled from 'styled-components'
 
-import combinedStore from '../../stores/combined'
+import gameStore from '../../stores/game'
+import {colors} from '../../variables'
 
 const InstructionsDiv = styled.div`
   position: fixed;
@@ -12,12 +13,12 @@ const InstructionsDiv = styled.div`
   box-shadow: 0px 1px 5px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
   padding: 10px 30px 40px;
-  background: white;
+  background: ${colors.white};
 `
 
 @observer class Instructions extends Component {
   render() {
-    const {onStartGameClick} = combinedStore
+    const {onStartGameClick} = gameStore
     return (
       <InstructionsDiv>
         <h2>squares</h2>

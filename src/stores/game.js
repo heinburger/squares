@@ -1,42 +1,48 @@
-import {useStrict, observable, action, autorun} from 'mobx'
-import timerStore from './timer'
+import {useStrict, observable, computed, action, autorun} from 'mobx'
 import entityStore from './entity'
 
 useStrict(true)
-class CombinedStore {
+class GameStore {
+  @observable paused = false
+  @observable showGameOver = false
+  @observable showInstructions = true
+
   constructor () {
+    this.setupGame()
     autorun(() => {
       if (entityStore.dead) {
         this.endGame()
       }
     })
   }
-  @observable paused = false
-  @observable showGameOver = false
-  @observable showInstructions = true
 
-  @action onInstructionsClick = () => {
+  @computed get gameTime () {
+    return entityStore.timer.formattedTime
+  }
+
+  @action setupGame = () => {
     this.showInstructions = true
     this.showGameOver = false
-    timerStore.resetTimer()
-    entityStore.startGame()
+    entityStore.generate()
+  }
+
+  @action onInstructionsClick = () => {
+    this.setupGame()
   }
 
   @action onStartGameClick = () => {
     this.showInstructions = false
     this.showGameOver = false
+    entityStore.generate()
     this.startGame()
   }
 
   @action endGame = () => {
-    timerStore.endTimer()
     this.showGameOver = true
   }
 
   @action startGame = () => {
-    timerStore.startTimer()
-    entityStore.startGame()
-    entityStore.activatePlayer()
+    entityStore.start()
   }
 
   @action togglePause = () => {
@@ -44,5 +50,5 @@ class CombinedStore {
   }
 }
 
-const combinedStore = new CombinedStore()
-export default combinedStore
+const gameStore = new GameStore()
+export default gameStore
