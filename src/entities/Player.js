@@ -1,12 +1,17 @@
 import {overlapping} from './_utils'
+import {colors} from '../variables'
 
 export default class Player {
   constructor (kill) {
     this.kill = kill
+    this.active = false
     this.side = 30
     this.invincible = true
     this.growing = 0
     this.sick = false
+    this.color = colors.purple
+    this.altCount = 0
+    this.altMod = 15
     this.growthMultiplier = 0.1
     this.x = window.innerWidth / 2 - this.side / 2
     this.y = window.innerHeight / 2 - this.side / 2
@@ -15,7 +20,14 @@ export default class Player {
   }
 
   draw = (context) => {
-    context.fillStyle = this.invincible ? 'rgba(0, 0, 255, 0.5)' : 'blue'
+    if (this.invincible && this.active) {
+      this.altCount++
+      context.fillStyle = this.altCount % this.altMod < this.altMod * 0.5
+        ? colors.purple
+        : colors.lightPurple
+    } else {
+      context.fillStyle = colors.purple
+    }
     context.fillRect(this.x, this.y, this.side, this.side)
   }
 

@@ -10,9 +10,11 @@ const InstructionsDiv = styled.div`
   top: 20%;
   right: 20%;
   left: 20%;
-  box-shadow: 0px 1px 5px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 1px 5px 5px rgba(0, 0, 0, 0.05);
+  border: 1px solid ${colors.gray};
   text-align: center;
   padding: 10px 30px 40px;
+  color: ${colors.blue};
   background: ${colors.white};
 `
 

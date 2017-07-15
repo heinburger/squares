@@ -9,7 +9,7 @@ export default class Square {
     this.dy = dy
     this.side = side
     this.alive = true
-    this.color = colors.darkBlue
+    this.color = colors.lighterBlue
     this.speedUpMultiplier = 1.75
     this.speedUpLength = 5000 // ms
   }
