@@ -97,7 +97,7 @@ class EntityStore {
   }
 
   _addRandomSquare = () => {
-    if (Math.random() < this.addPowerUpChance) {
+    if (Math.random() < this.addSquareChange) {
       this.squares.push(this._genereateOneSquare())
     }
   }
