@@ -18,7 +18,7 @@ const HighScoresDiv = styled.div`
   max-width: 300px;
   margin: 0 auto;
   display: flex;
-  text-align: right;
+  text-align: left;
   padding-bottom: 5px;
 `
 const HighScoreCol = styled.div`

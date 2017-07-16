@@ -10,6 +10,7 @@ import {StyledButton} from '../Styled'
 const InstructionsDiv = styled.div`
   position: fixed;
   top: 20%;
+  font-size: larger;
   right: 20%;
   left: 20%;
   box-shadow: 0px 1px 5px 5px rgba(0, 0, 0, 0.05);
