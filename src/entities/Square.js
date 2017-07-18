@@ -9,13 +9,12 @@ export default class Square {
     this.dy = dy
     this.side = side
     this.alive = true
-    this.color = colors.lighterBlue
     this.speedUpMultiplier = 1.75
     this.speedUpLength = 5000 // ms
   }
 
   draw = (context) => {
-    context.fillStyle = this.color
+    context.fillStyle = colors.squareFill
     context.fillRect(this.x, this.y, this.side, this.side)
   }
 

@@ -1,7 +1,7 @@
 import {useStrict, observable, computed, action, autorun} from 'mobx'
 
 import entityStore from './entity'
-import highScoreStore from './highScores'
+import highScoreStore from './highScore'
 
 useStrict(true)
 class GameStore {
@@ -10,7 +10,6 @@ class GameStore {
   @observable showInstructions = true
 
   constructor () {
-    entityStore.generate()
     autorun(() => {
       if (entityStore.dead) {
         this.endGame()

@@ -8,16 +8,15 @@ export default class PowerUp {
     this.x = window.innerWidth * Math.random() - this.size
     this.y = window.innerHeight * Math.random() - this.size
     this.alive = true
-    this.bgColor = colors.purple
-    this.color = colors.green
     setTimeout(() => this.kill(), this.lifeSpan)
   }
 
   draw = (context) => {
-    context.strokeStyle = this.poison ? colors.green : colors.black
+    context.strokeStyle = this.poison
+      ? colors.heartPoisonStroke : colors.heartStroke
     context.strokeWeight = 1
     context.lineWidth = 2.0
-    context.fillStyle = colors.brightRed
+    context.fillStyle = colors.heartFill
     const x = this.x
     const y = this.y
     const w = this.size

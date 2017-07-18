@@ -1,26 +1,64 @@
+import React from 'react'
 import styled from 'styled-components'
-import {colors} from '../../variables'
+import {theme, fonts} from '../../variables'
+import {blink, media} from './_utils'
+
+
+const StyledCenteredBoxChild = styled.div`
+  margin: 0 auto;
+  max-width: 36em;
+  padding: 2em 1em;
+  ${media.medium`
+    padding: 5em 1em;
+  `}
+  ${media.giant`
+    padding: 8em 1em;
+  `}
+`
+
+const StyledCenteredBoxContainer = styled.main`
+  background: ${props => props.bgColor ? props.bgColor : theme.background};
+  color: ${props => props.color ? props.color : theme.color};
+  display: block;
+  text-align: center;
+`
+
+export const StyledCenteredBox = (props) => (
+  <StyledCenteredBoxContainer {...props}>
+    <StyledCenteredBoxChild>{props.children}</StyledCenteredBoxChild>
+  </StyledCenteredBoxContainer>
+)
+
+export const StyledSection = styled.section`
+  box-sizing: border-box;
+  padding-bottom: 2em;
+`
 
 export const StyledButton = styled.button`
-  background-color: ${props => props.primary ? colors.purple : colors.white};
-  border-radius: 5px;
-  border: 1px solid ${props => props.primary ? colors.purple : colors.white};
-  color: ${props => props.primary ? colors.white : colors.blue};
+  appearance: none;
+  background-color: ${props => props.primary
+    ? theme.buttonPrimaryBackground : theme.buttonBackground};
+  border-radius: 0.5em;
+  border: none;
+  box-shadow: 0.125em 0.1875em 0em 0.0625em ${props => props.primary
+    ? theme.buttonPrimaryShadow : theme.buttonShadow};
+  color: ${props => props.primary
+    ? theme.buttonPrimaryColor : theme.buttonColor};
   cursor: pointer;
-  font-size: 14px;
-  padding: 11px 22px;
-  margin: 5px;
+  font-size: ${fonts.small};
+  padding: 1em 2em;
+  margin: 0 0.5em 0.75em;
+  outline: none;
   position: relative;
   vertical-align: bottom;
   white-space: normal;
-  &:hover {
-    color: ${props => props.primary ? colors.lightPurple : colors.blue};
-    background-color: ${props => props.primary ? colors.purple : colors.gray};
-    border-color: ${props => props.primary ? colors.lightPurple : colors.white}
+  &:hover, &:focus {
+    color: ${props => props.primary
+      ? theme.buttonPrimaryHoverColor : theme.buttonHoverColor};
   }
-  &:focus {
-    color: ${props => props.primary ? colors.lightPurple : colors.white};
-    background-color: ${props => props.primary ? colors.purple : colors.gray};
+  &:active {
+    transform: translate(0.1875em, 0.25em);
+    box-shadow: none;
   }
   &:disabled {
     cursor: not-allowed;
@@ -30,23 +68,47 @@ export const StyledButton = styled.button`
 
 export const StyledInput = styled.input`
   appearance: none;
-  border-width: 1px;
-  border-color: ${colors.white};
+  background-color: ${theme.inputBackground};
+  border: 1px solid ${theme.color};
   border-radius: 5px;
-  border-style: solid;
   box-shadow: none;
-  max-width: 190px;
   box-sizing: border-box;
-  color: ${colors.blue};
-  font-size: 20px;
-  margin-bottom: 5px;
-  padding: 8px 20px;
+  color: ${theme.color};
+  width: 100%;
+  max-width: 18em;
+  outline: none;
+  margin-bottom: 0.75em;
+  padding: 0.75em 1em;
   &:hover {
-    border-color: ${colors.lightPurple};
+    border: 1px solid ${theme.inputBorder};
   }
   &:focus {
-    border-color: ${colors.lightPurple};
-    box-shadow: inset 0 1px 3px ${colors.gray};
-    outline: none;
+    border: 1px solid ${theme.inputBorder};
+    color: ${theme.color};
+  }
+  &::placeholder {
+    color: ${theme.placeholder};
+  }
+`
+
+export const StyledTitle = styled.div`
+  font-size: ${props => props.primary ? fonts.large : fonts.medium};
+  ${props => props.blink && `animation: 0.5s ${blink} linear infinite;`}
+
+  ${media.medium`
+    font-size: ${props => props.primary ? fonts.giant : fonts.large};
+  `}
+`
+
+export const StyledText = styled.div`
+  font-size: ${fonts.small};
+`
+
+export const StyledTable = styled.table`
+  width: 100%;
+  text-align: left;
+
+  & th {
+    color: ${theme.tableHeaderText};
   }
 `

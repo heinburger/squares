@@ -8,7 +8,6 @@ export default class Player {
     this.invincible = true
     this.growing = 0
     this.sick = false
-    this.color = colors.purple
     this.altCount = 0
     this.altMod = 15
     this.growthMultiplier = 0.1
@@ -22,10 +21,10 @@ export default class Player {
     if (this.invincible) {
       this.altCount++
       context.fillStyle = this.altCount % this.altMod < this.altMod * 0.5
-        ? colors.purple
-        : colors.lightPurple
+        ? colors.playerFill
+        : colors.playerInvincibleFill
     } else {
-      context.fillStyle = colors.purple
+      context.fillStyle = colors.playerFill
     }
     context.fillRect(this.x, this.y, this.side, this.side)
   }

@@ -1,4 +1,4 @@
-class Devtools {
+class ToolStore {
   constructor () {
     this.canvas = document.getElementById('devtools')
     this.context = this.canvas.getContext('2d')
@@ -19,7 +19,6 @@ class Devtools {
     this.frameTimeStamp = Date.now()
   }
 }
-const devtoolsStore = new Devtools()
+const toolStore = new ToolStore()
 
-export default devtoolsStore
-export const startTools = devtoolsStore.update
+export default toolStore
