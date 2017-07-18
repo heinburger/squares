@@ -2,7 +2,8 @@ import {useStrict, action, observable} from 'mobx'
 
 import Square from '../entities/Square'
 import Player from '../entities/Player'
-import PowerUp from '../entities/PowerUp'
+import Heart from '../entities/Heart'
+import Star from '../entities/Star'
 import Timer from '../entities/Timer'
 
 useStrict(true)
@@ -19,8 +20,10 @@ class EntityStore {
     this.startingSquareSize = 15
     this.startingVelocityXMultiplier = 5
     this.startingVelocityYMultiplier = 2
-    this.addPowerUpChance = 0.005
-    this.addSquareChange = 0.01
+    this.timeUntilStars = 30 * 1000 // ms : default 40s
+    this.addHeartChance = 0.005
+    this.addStarChance = 0.004
+    this.addSquareChange = 0.015
   }
 
   @action generate = () => {
@@ -46,6 +49,7 @@ class EntityStore {
   update = () => {
     this.requestId = window.requestAnimationFrame(this.update)
     this.context.clearRect(0, 0, window.innerWidth, window.innerHeight)
+    this._cleanUpDeadEntities()
     for (let p of this.powerUps) {
       if (p.alive) { p.update(this.context) }
     }
@@ -57,14 +61,16 @@ class EntityStore {
     }
     this.timer.update(this.context)
 
-    this._addRandomPowerUp()
+    if (this.timer.delta > this.timeUntilStars) {
+      this._addRandomStar()
+    }
+    this._addRandomHeart()
     this._addRandomSquare()
   }
 
   start = () => {
     this.timer.start()
     this.playerActive = true
-    setTimeout(() => this.player.invincible = false, 2000)
   }
 
   _generateEntities = () => {
@@ -73,6 +79,11 @@ class EntityStore {
     this.powerUps = []
     this.squares = []
     this._generateSquares()
+  }
+
+  _cleanUpDeadEntities = () => {
+    this.squares = this.squares.filter((s) => s.alive)
+    this.powerUps = this.powerUps.filter((p) => p.alive)
   }
 
   _generateSquares = () => {
@@ -90,14 +101,20 @@ class EntityStore {
     return new Square(x, y, dx, dy, side)
   }
 
-  _addRandomPowerUp = () => {
-    if (Math.random() < this.addPowerUpChance) {
-      this.powerUps.push(new PowerUp())
+  _addRandomHeart = () => {
+    if (Math.random() < this.addHeartChance) {
+      this.powerUps.push(new Heart())
+    }
+  }
+
+  _addRandomStar = () => {
+    if (Math.random() < this.addStarChance) {
+      this.powerUps.push(new Star())
     }
   }
 
   _addRandomSquare = () => {
-    if (Math.random() < this.addSquareChange) {
+    if (Math.random() < this.addSquareChance) {
       this.squares.push(this._genereateOneSquare())
     }
   }

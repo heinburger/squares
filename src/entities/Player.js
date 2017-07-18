@@ -6,8 +6,19 @@ export default class Player {
     this.kill = kill
     this.side = 30
     this.invincible = true
+    this.initialInvincibleLength = 2000 // ms
+    this.invincibleLength = 5000 // ms
+    this.invincibleId = setTimeout(() => this.invincible = false, this.initialInvincibleLength)
     this.growing = 0
-    this.sick = false
+    this.sick = false // used to speed up world
+    this.drunkLength = 20000 // ms
+    this.drunk = false
+    this.drunkOffsetMax = 40
+    this.drunkOffsetInc = 5
+    this.drunkXDirection = Math.random() < 0.5 ? -1 : 1
+    this.drunkYDirection = Math.random() < 0.5 ? -1 : 1
+    this.drunkXOffset = 0
+    this.drunkYOffset = 0
     this.altCount = 0
     this.altMod = 15
     this.growthMultiplier = 0.1
@@ -31,9 +42,9 @@ export default class Player {
 
   update = (context, squares, powerUps) => {
     this.sick = false
+    this._checkPowerUpInteractions(powerUps)
     if (!this.invincible) {
       this._checkSquareInteractions(squares)
-      this._checkPowerUpInteractions(powerUps)
     }
     if (this.growing > 0) {
       this._grow()
@@ -83,14 +94,29 @@ export default class Player {
   _checkPowerUpInteractions = (powerUps) => {
     powerUps.slice().forEach((p, i) => {
       if (overlapping(this.getPosition(), p.getPosition())) {
-        if (p.alive) {
-          if (p.poison) {
-            this.sick = true
-          } else {
-            this.growing -= 1
-          }
-          p.kill()
+        switch (p.type) {
+          case 'heart':
+            if (p.poison) {
+              this.sick = true
+            } else {
+              this.growing -= 1
+            }
+            break
+          case 'star':
+            if (p.alcoholic) {
+              clearTimeout(this.drunkId)
+              this.drunkId = setTimeout(() => this.drunk = false, this.drunkLength)
+              this.drunk = true
+            } else {
+              clearTimeout(this.invincibleId)
+              this.invincibleId = setTimeout(() => this.invincible = false, this.invincibleLength)
+              this.invincible = true
+            }
+            break
+          default:
+            break
         }
+        p.kill()
       }
     })
   }
@@ -102,8 +128,25 @@ export default class Player {
   }
 
   _handleMouseMove = (e) => {
-    const x = e.clientX - this.side / 2
-    const y = e.clientY - this.side / 2
+    if (this.drunk) {
+      this.drunkXOffset += (this.drunkXDirection * this.drunkOffsetInc * Math.random())
+      this.drunkYOffset += (this.drunkYDirection * this.drunkOffsetInc * Math.random())
+      if (this.drunkXOffset > this.drunkOffsetMax) {
+        this.drunkXDirection = -1
+      } else if (this.drunkXOffset < -this.drunkOffsetMax) {
+        this.drunkXDirection = 1
+      }
+      if (this.drunkYOffset > this.drunkOffsetMax) {
+        this.drunkYDirection = -1
+      } else if (this.drunkYOffset < -this.drunkOffsetMax) {
+        this.drunkYDirection = 1
+      }
+    } else {
+      this.drunkXOffset = 0
+      this.drunkYOffset = 0
+    }
+    const x = e.clientX - this.side / 2 + this.drunkXOffset
+    const y = e.clientY - this.side / 2 - this.drunkYOffset
     this.x = x > window.innerWidth - this.side || x < 0
       ? this.x
       : x

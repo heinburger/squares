@@ -5,9 +5,10 @@ export default class Timer {
   constructor () {
     this.width = 150
     this.startTime = 0
+    this.delta = 0
     this.formattedTime = formatTime(0)
     this.x = window.innerWidth / 2 - this.width / 2
-    this.y = 30
+    this.y = 40
     this.color = theme.color
   }
 
@@ -19,7 +20,9 @@ export default class Timer {
 
   update = (context) => {
     if (this.startTime) {
-      this.formattedTime = formatTime(Date.now() - this.startTime)
+      const time = Date.now()
+      this.delta = time - this.startTime
+      this.formattedTime = formatTime(time - this.startTime)
       this.draw(context)
     }
   }

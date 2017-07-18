@@ -1,7 +1,8 @@
 import {colors} from '../variables'
 
-export default class PowerUp {
+export default class Heart {
   constructor () {
+    this.type = 'heart'
     this.size = 20
     this.poison = Math.random() > 0.2 ? false : true
     this.lifeSpan = 10 * 1000
@@ -15,7 +16,7 @@ export default class PowerUp {
     context.strokeStyle = this.poison
       ? colors.heartPoisonStroke : colors.heartStroke
     context.strokeWeight = 1
-    context.lineWidth = 2.0
+    context.lineWidth = 3
     context.fillStyle = colors.heartFill
     const x = this.x
     const y = this.y

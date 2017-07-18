@@ -5,7 +5,10 @@ export const colors = {
   heartFill: '#FF0000',
   heartStroke: '#000000',
   heartPoisonStroke: '#21B498',
-  yellow: '#F8C150'
+  starFill: '#F8C150',
+  starSecondFill: '#fbdda2',
+  starStroke: '#000000',
+  starDrunkStroke: '#dd6808'
 }
 
 export const theme = {

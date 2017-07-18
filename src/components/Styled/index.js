@@ -20,6 +20,9 @@ const StyledCenteredBoxContainer = styled.main`
   background: ${props => props.bgColor ? props.bgColor : theme.background};
   color: ${props => props.color ? props.color : theme.color};
   display: block;
+  overflow-x: hidden;
+  overflow-y: visible;
+  overflow-y: auto;
   text-align: center;
 `
 
