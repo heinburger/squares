@@ -7,9 +7,10 @@ useStrict(true)
 class GameStore {
   @observable name = ''
   @observable showGameOver = false
-  @observable showInstructions = true
+  @observable showInstructions = false
 
   constructor () {
+    this.onInstructionsClick() // <-- mimic handler (should probably do that differently)
     autorun(() => {
       if (entityStore.dead) {
         this.endGame()
@@ -57,7 +58,7 @@ class GameStore {
     this.showInstructions = true
     this.showGameOver = false
     highScoreStore.scoreAccepted = false
-    entityStore.generate()
+    entityStore.softGenerate()
   }
 
   @action onStartGameClick = () => {

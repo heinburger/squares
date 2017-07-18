@@ -16,7 +16,7 @@ export const theme = {
     inputBackground: '#EBBDC6',
     inputBorder: '#FFFFFF',
     color: '#556285',
-    background: '#FFFFFF',
+    background: 'none',
     instructionsBackground: '#FFFFFF',
     ggBackground: '#BC213F',
     ggColor: '#FFFFFF',

@@ -16,7 +16,7 @@ class EntityStore {
     this.canvas.height = window.innerHeight
     this.context = this.canvas.getContext('2d')
     this.playerActive = false
-    this.initialNumberOfSquares = parseInt((window.innerWidth * window.innerHeight) / 5000, 10)
+    this.numberOfSquares = parseInt((window.innerWidth * window.innerHeight) / 5000, 10)
     this.startingSquareSize = 15
     this.startingVelocityXMultiplier = 5
     this.startingVelocityYMultiplier = 2
@@ -24,10 +24,24 @@ class EntityStore {
     this.addHeartChance = 0.005
     this.addStarChance = 0.004
     this.addSquareChange = 0.015
+
+    // entities
+    this.timer = {}
+    this.player = {}
+    this.powerUps = []
+    this.squares = []
+
+    //canvas setup
+    this.setCanvasSize()
+  }
+
+  softGenerate = () => {
+    window.cancelAnimationFrame(this.requestId)
+    this._generateSquares(10)
+    this.softUpdate()
   }
 
   @action generate = () => {
-    this.setCanvasSize()
     this.playerActive = false
     this.dead = false
     this.time = 0
@@ -68,6 +82,15 @@ class EntityStore {
     this._addRandomSquare()
   }
 
+  softUpdate = () => {
+    this.requestId = window.requestAnimationFrame(this.softUpdate)
+    this.context.clearRect(0, 0, window.innerWidth, window.innerHeight)
+    for (let s of this.squares) {
+      if (s.alive) { s.update(this.context, this.player.sick) }
+    }
+    this._addRandomSquare()
+  }
+
   start = () => {
     this.timer.start()
     this.playerActive = true
@@ -86,9 +109,9 @@ class EntityStore {
     this.powerUps = this.powerUps.filter((p) => p.alive)
   }
 
-  _generateSquares = () => {
+  _generateSquares = (number = this.numberOfSquares) => {
     this.squares = []
-    const times = [...Array(this.initialNumberOfSquares).keys()]
+    const times = [...Array(number).keys()]
     times.forEach(() => this.squares.push(this._genereateOneSquare()))
   }
 
