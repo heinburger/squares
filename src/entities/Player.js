@@ -41,7 +41,7 @@ export default class Player {
       context.fillStyle = colors.playerFill
     }
     context.fillRect(this.x, this.y, this.size, this.size)
-    if (this.crowned === false) {
+    if (this.crowned) {
       context.fillStyle = colors.crownFill
       context.strokeStyle = colors.crownStroke
       context.strokeWeight = this.side * 0.5

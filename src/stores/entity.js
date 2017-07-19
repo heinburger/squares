@@ -99,6 +99,9 @@ class EntityStore {
     if (this.timer.delta > this.timeUntilStars) {
       this._addRandomStar()
     }
+    if (this.timer.delta > 60 * 2 * 1000) {
+      this.player.crown()
+    }
 
     // entity updates
     for (let p of this.powerUps) { p.update(this.context) }
