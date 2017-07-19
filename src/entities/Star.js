@@ -1,7 +1,11 @@
 import {colors} from '../variables'
+import {getId} from './_utils'
+
 
 export default class Star {
-  constructor () {
+  constructor (kill = () => false) {
+    this.id = getId()
+    this.kill = () => kill(this.id)
     this.type = 'star'
     this.size = 20
     this.alcoholic = Math.random() > 0.9 ? false : true
@@ -9,7 +13,6 @@ export default class Star {
     this.x = window.innerWidth * Math.random() - this.size
     this.y = window.innerHeight * Math.random() - this.size
     this.points = 5
-    this.alive = true
     this.altCount = 0
     this.altMod = 15
     setTimeout(() => this.kill(), this.lifeSpan)
@@ -54,6 +57,7 @@ export default class Star {
   }
 
   update = (context) => {
+    // main
     this.draw(context)
   }
 
@@ -64,9 +68,5 @@ export default class Star {
       right: this.x + this.size,
       bottom: this.y + this.size
     }
-  }
-
-  kill = () => {
-    this.alive = false
   }
 }

@@ -9,12 +9,10 @@ class HighScoreStore {
   @observable requesting = false
   @observable posting = false
   @observable scoreAccepted = false
-  @observable receivedOnce = false
   errors = observable.shallowMap()
 
   @action request = () => {
     this.errors.delete('get')
-    this.error = null
     this.requesting = true
   }
 
@@ -47,7 +45,7 @@ class HighScoreStore {
     this.scores.push(score)
   }
 
-  @action failure = (err) => {
+  @action failurePost = (err) => {
     this.posting = false
     this.errors.set('post', err || 'something happened..')
   }

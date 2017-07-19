@@ -1,4 +1,5 @@
 import {useStrict, observable, computed, action, autorun} from 'mobx'
+import {hasLocalStorageAvailable} from './_utils'
 
 import entityStore from './entity'
 import highScoreStore from './highScore'
@@ -6,11 +7,12 @@ import highScoreStore from './highScore'
 useStrict(true)
 class GameStore {
   @observable name = ''
+  @observable crowned = 0
   @observable showGameOver = false
-  @observable showInstructions = false
+  @observable showInstructions = true
 
   constructor () {
-    this.onInstructionsClick() // <-- mimic handler (should probably do that differently)
+    entityStore.idle()
     autorun(() => {
       if (entityStore.dead) {
         this.endGame()
@@ -58,15 +60,15 @@ class GameStore {
     this.showInstructions = true
     this.showGameOver = false
     highScoreStore.scoreAccepted = false
-    entityStore.softGenerate()
+    entityStore.idle()
   }
 
   @action onStartGameClick = () => {
     this.showInstructions = false
     this.showGameOver = false
     highScoreStore.scoreAccepted = false
-    entityStore.generate()
-    this.startGame()
+    this.checkForCrown()
+    entityStore.start(this.crowned)
   }
 
   @action onNameChange = (e) => {
@@ -78,17 +80,28 @@ class GameStore {
       name: this.name,
       mode: this.mode,
       time: this.gameTime,
-      number: this.numberOfSquares
+      number: this.numberOfSquares,
+      crown: /^((\d){2}:(\d){2}:(\d){3})/.test(this.gameTime) &&
+             this.gameTime > '02:00:000'
     })
   }
 
   @action endGame = () => {
+    const gotCrowned = this.gameTime > '02:00:000'
+    if (gotCrowned && hasLocalStorageAvailable()) {
+      localStorage.getItem('crowned', true)
+    }
+    document.title = `${gotCrowned ? '👑 ' : ''}${this.gameTime.replace(/:(\d){3}/, '')} < 2:00`
     this.showGameOver = true
     highScoreStore.getScores()
   }
 
-  @action startGame = () => {
-    entityStore.start()
+  @action checkForCrown = () => {
+    if (hasLocalStorageAvailable()) {
+      this.crowned = localStorage.getItem('crowned')
+    } else {
+      this.crowned = false
+    }
   }
 }
 

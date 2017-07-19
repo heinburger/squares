@@ -1,14 +1,16 @@
 import {colors} from '../variables'
+import {getId} from './_utils'
 
 export default class Heart {
-  constructor () {
+  constructor (kill = () => false) {
+    this.id = getId()
+    this.kill = () => kill(this.id)
     this.type = 'heart'
     this.size = 20
     this.poison = Math.random() > 0.2 ? false : true
-    this.lifeSpan = 10 * 1000
+    this.lifeSpan = 10 * 1000 // ms
     this.x = window.innerWidth * Math.random() - this.size
     this.y = window.innerHeight * Math.random() - this.size
-    this.alive = true
     setTimeout(() => this.kill(), this.lifeSpan)
   }
 
@@ -35,6 +37,9 @@ export default class Heart {
   }
 
   update = (context) => {
+    // do this first
+
+    // main
     this.draw(context)
   }
 
@@ -45,9 +50,5 @@ export default class Heart {
       right: this.x + this.size,
       bottom: this.y + this.size
     }
-  }
-
-  kill = () => {
-    this.alive = false
   }
 }

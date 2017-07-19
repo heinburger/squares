@@ -1,29 +1,32 @@
 import {colors} from '../variables'
+import {getId} from './_utils'
 
 export default class Square {
-  constructor (x, y, dx, dy, side) {
+  constructor (x = 0, y = 0, dx = 0, dy = 0, size = 0, kill = () => false) {
+    this.id = getId()
+    this.kill = () => kill(this.id)
     this.windowExtension = 50
     this.x = x
     this.y = y
     this.dx = dx
     this.dy = dy
-    this.side = side
-    this.alive = true
+    this.size = size
     this.speedUpMultiplier = 1.75
     this.speedUpLength = 5000 // ms
   }
 
   draw = (context) => {
     context.fillStyle = colors.squareFill
-    context.fillRect(this.x, this.y, this.side, this.side)
+    context.fillRect(this.x, this.y, this.size, this.size)
   }
 
   update = (context, shouldSpeedUp) => {
+    // do this first
     this._boundryInteratction()
     this._incrementPosition()
-    if (shouldSpeedUp) {
-      this._speedUp()
-    }
+    if (shouldSpeedUp) { this._speedUp() }
+
+    // draw
     this.draw(context)
   }
 
@@ -31,18 +34,14 @@ export default class Square {
     return {
       left: this.x,
       top: this.y,
-      right: this.x + this.side,
-      bottom: this.y + this.side
+      right: this.x + this.size,
+      bottom: this.y + this.size
     }
   }
 
-  kill = () => {
-    this.alive = false
-  }
-
   _boundryInteratction = () => {
-    if (this.x + this.side > window.innerWidth + this.windowExtension) {
-      this.x = window.innerWidth + this.windowExtension - this.side
+    if (this.x + this.size > window.innerWidth + this.windowExtension) {
+      this.x = window.innerWidth + this.windowExtension - this.size
       this.dx = -this.dx
     }
 
@@ -51,8 +50,8 @@ export default class Square {
       this.dx = -this.dx
     }
 
-    if (this.y + this.side > window.innerHeight + this.windowExtension) {
-      this.y = window.innerHeight + this.windowExtension - this.side
+    if (this.y + this.size > window.innerHeight + this.windowExtension) {
+      this.y = window.innerHeight + this.windowExtension - this.size
       this.dy = -this.dy
     }
 

@@ -12,23 +12,23 @@ export const colors = {
 }
 
 export const theme = {
-    placeholder: '#e3a5b2',
-    inputBackground: '#EBBDC6',
-    inputBorder: '#FFFFFF',
-    color: '#556285',
-    background: 'none',
-    instructionsBackground: '#FFFFFF',
-    ggBackground: '#BC213F',
-    ggColor: '#FFFFFF',
-    tableHeaderText: '#82172c',
-    buttonPrimaryBackground: '#543EAC',
-    buttonPrimaryShadow: '#2c205a',
-    buttonPrimaryColor: '#AB9FEF',
-    buttonPrimaryHoverColor: '#FFFFFF',
-    buttonBackground: '#FFFFFF',
-    buttonShadow: '#3E4862',
-    buttonColor: '#3E4862',
-    buttonHoverColor: '#556285'
+  color: '#556285',
+  background: 'none',
+  instructionsBackground: '#FFFFFF',
+  ggBackground: '#BC213F',
+  ggColor: '#FFFFFF',
+  placeholder: '#e3a5b2',
+  inputBackground: '#EBBDC6',
+  inputBorder: '#FFFFFF',
+  tableHeaderText: '#82172c',
+  buttonPrimaryBackground: '#543EAC',
+  buttonPrimaryShadow: '#2c205a',
+  buttonPrimaryColor: '#AB9FEF',
+  buttonPrimaryHoverColor: '#FFFFFF',
+  buttonBackground: '#FFFFFF',
+  buttonShadow: '#3E4862',
+  buttonColor: '#3E4862',
+  buttonHoverColor: '#556285'
 }
 
 export const fonts = {

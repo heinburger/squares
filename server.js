@@ -12,6 +12,7 @@ var scoreSchema = new mongoose.Schema({
   name: { type: String, default: 'unknown' },
   mode: { type: String, default: 'normal' },
   time: String,
+  crown: Boolean,
   number: Number,
   date: { type: Date, default: Date.now }
 })
@@ -30,7 +31,7 @@ var router = express.Router()
 router.get('/scores', (req, res) => {
   Score.find()
     .sort('-time')
-    .select('time name number date')
+    .select('time name number date crown')
     .exec((err, scores) => {
       if (err) {
         res.send(err)

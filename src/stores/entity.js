@@ -15,7 +15,6 @@ class EntityStore {
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight
     this.context = this.canvas.getContext('2d')
-    this.playerActive = false
     this.numberOfSquares = parseInt((window.innerWidth * window.innerHeight) / 5000, 10)
     this.startingSquareSize = 15
     this.startingVelocityXMultiplier = 5
@@ -35,19 +34,27 @@ class EntityStore {
     this.setCanvasSize()
   }
 
-  softGenerate = () => {
+  @action start = (playerIsCrowned) => {
+    // do this first
     window.cancelAnimationFrame(this.requestId)
-    this._generateSquares(10)
-    this.softUpdate()
+    this.dead = false
+    this._generateAllEntities()
+
+    // main
+    this.timer.start()
+    if (playerIsCrowned) { this.player.crown() }
+
+    // start animatinos
+    this._update()
   }
 
-  @action generate = () => {
-    this.playerActive = false
-    this.dead = false
-    this.time = 0
+  @action idle = () => {
+    // do this first
     window.cancelAnimationFrame(this.requestId)
-    this._generateEntities()
-    this.update()
+    this._generateSquares(10)
+
+    // start animations
+    this._softUpdate()
   }
 
   @action endGame = () => {
@@ -60,53 +67,54 @@ class EntityStore {
     this.canvas.height = window.innerHeight
   }
 
-  update = () => {
-    this.requestId = window.requestAnimationFrame(this.update)
-    this.context.clearRect(0, 0, window.innerWidth, window.innerHeight)
-    this._cleanUpDeadEntities()
-    for (let p of this.powerUps) {
-      if (p.alive) { p.update(this.context) }
-    }
-    for (let s of this.squares) {
-      if (s.alive) { s.update(this.context, this.player.sick) }
-    }
-    if (this.playerActive) {
-      this.player.update(this.context, this.squares, this.powerUps)
-    }
-    this.timer.update(this.context)
+  killPowerup = (id) => {
+    this.powerUps.splice(this.powerUps.findIndex((p) => p.id === id), 1)
+  }
 
+  killSquare = (id) => {
+    this.squares.splice(this.squares.findIndex((s) => s.id === id), 1)
+  }
+
+  _softUpdate = () => {
+    // do this first
+    this.requestId = window.requestAnimationFrame(this._softUpdate)
+    this.context.clearRect(0, 0, window.innerWidth, window.innerHeight)
+
+    // entity updates
+    for (let s of this.squares) {
+      s.update(this.context)
+    }
+
+    // extras
+    this._addRandomSquare()
+  }
+
+  _update = () => {
+    // do this first
+    this.squares.length
+    this.requestId = window.requestAnimationFrame(this._update)
+    this.context.clearRect(0, 0, window.innerWidth, window.innerHeight)
+    this._addRandomHeart()
+    this._addRandomSquare()
     if (this.timer.delta > this.timeUntilStars) {
       this._addRandomStar()
     }
-    this._addRandomHeart()
-    this._addRandomSquare()
+
+    // entity updates
+    for (let p of this.powerUps) { p.update(this.context) }
+    for (let s of this.squares) { s.update(this.context, this.player.sick) }
+    this.timer.update(this.context)
+
+    // update player last
+    this.player.update(this.context, this.squares, this.powerUps)
   }
 
-  softUpdate = () => {
-    this.requestId = window.requestAnimationFrame(this.softUpdate)
-    this.context.clearRect(0, 0, window.innerWidth, window.innerHeight)
-    for (let s of this.squares) {
-      if (s.alive) { s.update(this.context, this.player.sick) }
-    }
-    this._addRandomSquare()
-  }
-
-  start = () => {
-    this.timer.start()
-    this.playerActive = true
-  }
-
-  _generateEntities = () => {
+  _generateAllEntities = () => {
     this.timer = new Timer()
     this.player = new Player(this.endGame)
     this.powerUps = []
     this.squares = []
     this._generateSquares()
-  }
-
-  _cleanUpDeadEntities = () => {
-    this.squares = this.squares.filter((s) => s.alive)
-    this.powerUps = this.powerUps.filter((p) => p.alive)
   }
 
   _generateSquares = (number = this.numberOfSquares) => {
@@ -121,18 +129,18 @@ class EntityStore {
     const y = Math.random() * (window.innerHeight - side)
     const dx = (Math.random() - 0.5) * this.startingVelocityXMultiplier
     const dy = (Math.random() - 0.5) * this.startingVelocityYMultiplier
-    return new Square(x, y, dx, dy, side)
+    return new Square(x, y, dx, dy, side, this.killSquare)
   }
 
   _addRandomHeart = () => {
     if (Math.random() < this.addHeartChance) {
-      this.powerUps.push(new Heart())
+      this.powerUps.push(new Heart(this.killPowerup))
     }
   }
 
   _addRandomStar = () => {
     if (Math.random() < this.addStarChance) {
-      this.powerUps.push(new Star())
+      this.powerUps.push(new Star(this.killPowerup))
     }
   }
 
@@ -141,6 +149,8 @@ class EntityStore {
       this.squares.push(this._genereateOneSquare())
     }
   }
+
+
 }
 
 const entityStore = new EntityStore()
