@@ -7,7 +7,7 @@ import highScoreStore from './highScore'
 useStrict(true)
 class GameStore {
   @observable name = ''
-  @observable crowned = 0
+  @observable crowned = false
   @observable showGameOver = false
   @observable showInstructions = true
 

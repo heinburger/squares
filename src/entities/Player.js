@@ -42,17 +42,23 @@ export default class Player {
     }
     context.fillRect(this.x, this.y, this.size, this.size)
     if (this.crowned === false) {
-      this.fillStyle = colors.crownFill
-      this.strokeStyle = colors.crownStroke
+      context.fillStyle = colors.crownFill
+      context.strokeStyle = colors.crownStroke
+      context.strokeWeight = this.side * 0.5
       context.beginPath()
       context.moveTo(this.x - this.size * 0.2, this.y + this.size * 0.4)
 
-      context.lineTo(this.x - this.size * 0.2, this.y - this.size * 0.2)
-      context.lineTo(this.x + this.size * 0.2, this.y - this.size * 0.2)
-      context.lineTo(this.x + this.size * 0.2, this.y + this.size * 0.1)
-      context.lineTo(this.x + this.size * 0.9, this.y + this.size * 0.1)
+      context.lineTo(this.x - this.size * 0.2, this.y - this.size * 0.25)
+      context.lineTo(this.x + this.size * 0.1, this.y - this.size * 0.25)
+      context.lineTo(this.x + this.size * 0.1, this.y + this.size * 0.1)
 
-      context.lineTo(this.x + this.size * 0.9, this.y - this.size * 0.2)
+      context.lineTo(this.x + this.size * 0.425, this.y + this.size * 0.1)
+      context.lineTo(this.x + this.size * 0.425, this.y - this.size * 0.2)
+      context.lineTo(this.x + this.size * 0.7, this.y - this.size * 0.2)
+      context.lineTo(this.x + this.size * 0.7, this.y + this.size * 0.1)
+
+      context.lineTo(this.x + this.size * 0.975, this.y + this.size * 0.1)
+      context.lineTo(this.x + this.size * 0.975, this.y - this.size * 0.2)
       context.lineTo(this.x + this.size * 1.2, this.y - this.size * 0.2)
       context.lineTo(this.x + this.size * 1.2, this.y + this.size * 0.4)
       // context.lineTo(this.x - this.size * 0.1, this.y + this.size * 0.4)

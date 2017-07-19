@@ -4,6 +4,8 @@ export const colors = {
   playerInvincibleFill: '#AB9FEF',
   heartFill: '#FF0000',
   heartStroke: '#000000',
+  crownFill: '#F8C150',
+  crownStroke: '#fbdda2',
   heartPoisonStroke: '#21B498',
   starFill: '#F8C150',
   starSecondFill: '#fbdda2',
