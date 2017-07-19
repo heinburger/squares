@@ -4,6 +4,7 @@ import Square from '../entities/Square'
 import Player from '../entities/Player'
 import Heart from '../entities/Heart'
 import Star from '../entities/Star'
+import Forcefield from '../entities/Forcefield'
 import Timer from '../entities/Timer'
 
 useStrict(true)
@@ -19,10 +20,12 @@ class EntityStore {
     this.startingSquareSize = 15
     this.startingVelocityXMultiplier = 5
     this.startingVelocityYMultiplier = 2
-    this.timeUntilStars = 30 * 1000 // ms : default 40s
-    this.addHeartChance = 0.005
-    this.addStarChance = 0.004
-    this.addSquareChange = 0.015
+    this.timeUntilStars = 30 * 1000 // ms <-- default 30s
+    this.timeUntilForcefields = 60 * 1000 // ms <-- default 60s
+    this.addHeartChance = 0.005 // <-- default 0.005
+    this.addStarChance = 0.004 // <-- default 0.004
+    this.addForcefieldChance = 0.003 // <-- default 0.003
+    this.addSquareChange = 0.015 // <-- default 0.015
 
     // entities
     this.timer = {}
@@ -34,7 +37,7 @@ class EntityStore {
     this.setCanvasSize()
   }
 
-  @action start = (playerIsCrowned) => {
+  @action start = (playerIsCrowned = false) => {
     // do this first
     window.cancelAnimationFrame(this.requestId)
     this.dead = false
@@ -68,11 +71,13 @@ class EntityStore {
   }
 
   killPowerup = (id) => {
-    this.powerUps.splice(this.powerUps.findIndex((p) => p.id === id), 1)
+    const powerUpIndex = this.powerUps.findIndex((p) => p.id === id)
+    if (powerUpIndex > -1) { this.powerUps.splice(powerUpIndex, 1) }
   }
 
   killSquare = (id) => {
-    this.squares.splice(this.squares.findIndex((s) => s.id === id), 1)
+    const squareIndex = this.squares.findIndex((s) => s.id === id)
+    if (squareIndex > -1) { this.squares.splice(squareIndex, 1) }
   }
 
   _softUpdate = () => {
@@ -91,13 +96,15 @@ class EntityStore {
 
   _update = () => {
     // do this first
-    this.squares.length
     this.requestId = window.requestAnimationFrame(this._update)
     this.context.clearRect(0, 0, window.innerWidth, window.innerHeight)
     this._addRandomHeart()
     this._addRandomSquare()
     if (this.timer.delta > this.timeUntilStars) {
       this._addRandomStar()
+    }
+    if (this.timer.delta > this.timeUntilForcefields) {
+      this._addRandomForcefield()
     }
     if (this.timer.delta > 60 * 2 * 1000) {
       this.player.crown()
@@ -147,13 +154,17 @@ class EntityStore {
     }
   }
 
+  _addRandomForcefield = () => {
+    if (Math.random() < this.addForcefieldChance) {
+      this.powerUps.push(new Forcefield(this.killPowerup))
+    }
+  }
+
   _addRandomSquare = () => {
     if (Math.random() < this.addSquareChance) {
       this.squares.push(this._genereateOneSquare())
     }
   }
-
-
 }
 
 const entityStore = new EntityStore()

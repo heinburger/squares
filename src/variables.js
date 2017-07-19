@@ -2,15 +2,17 @@ export const colors = {
   squareFill: '#556285',
   playerFill: '#543EAC',
   playerInvincibleFill: '#AB9FEF',
-  heartFill: '#FF0000',
-  heartStroke: '#000000',
   crownFill: '#F8C150',
   crownStroke: '#fbdda2',
+  heartFill: '#FF0000',
+  heartStroke: '#000000',
   heartPoisonStroke: '#21B498',
   starFill: '#F8C150',
   starSecondFill: '#fbdda2',
-  starStroke: '#000000',
-  starDrunkStroke: '#dd6808'
+  starStroke: '#dd6808',
+  starDrunkStroke: '#21B498',
+  forcefieldStroke: '#018EA6',
+  forcefieldTeleportStroke: '#21B498'
 }
 
 export const theme = {

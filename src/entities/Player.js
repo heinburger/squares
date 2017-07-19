@@ -13,8 +13,10 @@ export default class Player {
     this.invincibleId = setTimeout(() => this.invincible = false, this.initialInvincibleLength)
     this.growing = 0
     this.sick = false // used to speed up world
-    this.drunkLength = 20000 // ms
+    this.forcefield = false
+    this.forcefieldLength = 7000 // ms
     this.drunk = false
+    this.drunkLength = 7000 // ms
     this.drunkOffsetMax = 40
     this.drunkOffsetInc = 5
     this.drunkXDirection = Math.random() < 0.5 ? -1 : 1
@@ -41,6 +43,14 @@ export default class Player {
       context.fillStyle = colors.playerFill
     }
     context.fillRect(this.x, this.y, this.size, this.size)
+    if (this.forcefield) {
+      context.strokeStyle = colors.forcefieldStroke
+      context.beginPath()
+      context.arc(this.x + this.size / 2, this.y + this.size / 2, this.size, 0, 2 * Math.PI, false)
+      context.closePath()
+      context.stroke()
+    }
+
     if (this.crowned) {
       context.fillStyle = colors.crownFill
       context.strokeStyle = colors.crownStroke
@@ -134,6 +144,8 @@ export default class Player {
           case 'heart':
             if (p.poison) {
               this.sick = true
+            } else if (p.giant) {
+              this.growing -= 3
             } else {
               this.growing--
             }
@@ -147,6 +159,16 @@ export default class Player {
               clearTimeout(this.invincibleId)
               this.invincibleId = setTimeout(() => this.invincible = false, this.invincibleLength)
               this.invincible = true
+            }
+            break
+          case 'forcefield':
+            if (p.teleport) {
+              this.x = window.innerWidth / 2 - this.size / 2
+              this.y = window.innerHeight / 2 - this.size / 2
+            } else {
+              clearTimeout(this.forcefieldId)
+              this.forcefieldId = setTimeout(() => this.forcefield = false, this.forcefieldLength)
+              this.forcefield = true
             }
             break
           default:

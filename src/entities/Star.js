@@ -1,20 +1,19 @@
 import {colors} from '../variables'
 import {getId} from './_utils'
 
-
 export default class Star {
   constructor (kill = () => false) {
     this.id = getId()
     this.kill = () => kill(this.id)
     this.type = 'star'
     this.size = 20
-    this.alcoholic = Math.random() > 0.9 ? false : true
-    this.lifeSpan = 7 * 1000
+    this.alcoholic = Math.random() > 0.2 ? false : true
+    this.lifeSpan = 7 * 1000 // ms
     this.x = window.innerWidth * Math.random() - this.size
     this.y = window.innerHeight * Math.random() - this.size
     this.points = 5
-    this.altCount = 0
-    this.altMod = 15
+    this.tempFrameCount = 0
+    this.framesForColor = 15
     setTimeout(() => this.kill(), this.lifeSpan)
   }
 
@@ -23,8 +22,8 @@ export default class Star {
       ? colors.starDrunkStroke : colors.starStroke
     context.strokeWeight = 1
     context.lineWidth = 3
-    this.altCount++
-    context.fillStyle = this.altCount % this.altMod < this.altMod * 0.7
+    this.tempFrameCount++
+    context.fillStyle = this.tempFrameCount % this.framesForColor < this.framesForColor * 0.7
       ? colors.starFill
       : colors.starSecondFill
     const x = this.x

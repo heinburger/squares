@@ -6,8 +6,9 @@ export default class Heart {
     this.id = getId()
     this.kill = () => kill(this.id)
     this.type = 'heart'
-    this.size = 20
-    this.poison = Math.random() > 0.2 ? false : true
+    this.giant = Math.random() < 0.1
+    this.poison = Math.random() < 0.2
+    this.size = this.giant ? 50 : 20
     this.lifeSpan = 10 * 1000 // ms
     this.x = window.innerWidth * Math.random() - this.size
     this.y = window.innerHeight * Math.random() - this.size
