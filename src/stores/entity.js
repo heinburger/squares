@@ -1,5 +1,6 @@
 import {useStrict, action, observable} from 'mobx'
 
+import {overlapping} from '../entities/_utils'
 import Square from '../entities/Square'
 import Player from '../entities/Player'
 import Heart from '../entities/Heart'
@@ -17,7 +18,7 @@ class EntityStore {
     this.canvas.height = window.innerHeight
     this.context = this.canvas.getContext('2d')
     this.numberOfSquares = parseInt((window.innerWidth * window.innerHeight) / 5000, 10)
-    this.startingSquareSize = 15
+    this.startingSquareSize = 15 // <-- default 15
     this.startingVelocityXMultiplier = 5
     this.startingVelocityYMultiplier = 2
     this.timeUntilStars = 30 * 1000 // ms <-- default 30s
@@ -29,7 +30,7 @@ class EntityStore {
 
     // entities
     this.timer = {}
-    this.player = {}
+    this.players = []
     this.powerUps = []
     this.squares = []
 
@@ -45,7 +46,7 @@ class EntityStore {
 
     // main
     this.timer.start()
-    if (playerIsCrowned) { this.player.crown() }
+    if (playerIsCrowned) { this.players[0].crown() }
 
     // start animatinos
     this._update()
@@ -84,14 +85,14 @@ class EntityStore {
     // do this first
     this.requestId = window.requestAnimationFrame(this._softUpdate)
     this.context.clearRect(0, 0, window.innerWidth, window.innerHeight)
+    this._addRandomSquare()
 
     // entity updates
     for (let s of this.squares) {
       s.update(this.context)
     }
 
-    // extras
-    this._addRandomSquare()
+    this._physics()
   }
 
   _update = () => {
@@ -107,21 +108,25 @@ class EntityStore {
       this._addRandomForcefield()
     }
     if (this.timer.delta > 60 * 2 * 1000) {
-      this.player.crown()
+      this.players[0].crown()
     }
 
     // entity updates
     for (let p of this.powerUps) { p.update(this.context) }
-    for (let s of this.squares) { s.update(this.context, this.player.sick) }
+    for (let s of this.squares) { s.update(this.context, this.players[0].sick) }
     this.timer.update(this.context)
 
-    // update player last
-    this.player.update(this.context, this.squares, this.powerUps)
+    // update players last
+    for (let player of this.players) {
+      player.update(this.context, this.squares, this.powerUps)
+    }
+
+    this._physics()
   }
 
   _generateAllEntities = () => {
     this.timer = new Timer()
-    this.player = new Player(this.endGame)
+    this.players = [new Player(this.endGame)]
     this.powerUps = []
     this.squares = []
     this._generateSquares()
@@ -163,6 +168,33 @@ class EntityStore {
   _addRandomSquare = () => {
     if (Math.random() < this.addSquareChance) {
       this.squares.push(this._genereateOneSquare())
+    }
+  }
+
+  _physics = () => {
+    const entities = [...this.squares, ...this.powerUps, ...this.players]
+    entities.forEach((e1) => {
+      const others = entities.filter((e) => e.id !== e1.id && !e.hit)
+      others.forEach((e2) => {
+        if (overlapping(e1.getPosition(), e2.getPosition())) {
+          this._handleEntityInteraction(e1, e2)
+        }
+      })
+    })
+
+  }
+
+  _handleEntityInteraction = (e1, e2) => {
+    const x = e2.x - e1.x
+    const y = e2.y - e1.y
+    const degs = (Math.atan2(y, x) * 180 / Math.PI) % 360
+    if ((degs >= -45 && degs < 45)) {
+      if (e1.dx > 0) e1.dx = -e1.dx
+      if (e2.dx < 0) e2.dx = -e2.dx
+    }
+    else if (degs > 45 && degs <= 135) {
+      if (e1.dy > 0) e1.dy = -e1.dy
+      if (e2.dy < 0) e2.dy = -e2.dy
     }
   }
 }
