@@ -174,7 +174,7 @@ class EntityStore {
   _physics = () => {
     const entities = [...this.squares, ...this.powerUps, ...this.players]
     entities.forEach((e1) => {
-      const others = entities.filter((e) => e.id !== e1.id && !e.hit)
+      const others = entities.filter((e) => e.id !== e1.id)
       others.forEach((e2) => {
         if (overlapping(e1.getPosition(), e2.getPosition())) {
           this._handleEntityInteraction(e1, e2)
