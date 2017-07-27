@@ -1,6 +1,5 @@
 import {useStrict, action, observable} from 'mobx'
 
-import {overlapping} from '../entities/_utils'
 import Square from '../entities/Square'
 import Player from '../entities/Player'
 import Heart from '../entities/Heart'
@@ -38,6 +37,11 @@ class EntityStore {
     this.setCanvasSize()
   }
 
+  @action endGame = () => {
+    this.dead = true
+    window.cancelAnimationFrame(this.requestId)
+  }
+
   @action start = (playerIsCrowned = false) => {
     // do this first
     window.cancelAnimationFrame(this.requestId)
@@ -52,18 +56,13 @@ class EntityStore {
     this._update()
   }
 
-  @action idle = () => {
+  idle = () => {
     // do this first
     window.cancelAnimationFrame(this.requestId)
     this._generateSquares(10)
 
     // start animations
     this._softUpdate()
-  }
-
-  @action endGame = () => {
-    this.dead = true
-    window.cancelAnimationFrame(this.requestId)
   }
 
   setCanvasSize = () => {
@@ -87,41 +86,37 @@ class EntityStore {
     this.context.clearRect(0, 0, window.innerWidth, window.innerHeight)
     this._addRandomSquare()
 
+    const physicalEntities = [...this.squares, ...this.powerUps]
+
     // entity updates
     for (let s of this.squares) {
-      s.update(this.context)
+      s.update(this.context, physicalEntities)
     }
-
-    this._physics()
+    for (let player of this.players) {
+      player.update(this.context, this.squares, this.powerUps)
+    }
   }
 
   _update = () => {
     // do this first
     this.requestId = window.requestAnimationFrame(this._update)
     this.context.clearRect(0, 0, window.innerWidth, window.innerHeight)
-    this._addRandomHeart()
-    this._addRandomSquare()
-    if (this.timer.delta > this.timeUntilStars) {
-      this._addRandomStar()
-    }
-    if (this.timer.delta > this.timeUntilForcefields) {
-      this._addRandomForcefield()
-    }
-    if (this.timer.delta > 60 * 2 * 1000) {
-      this.players[0].crown()
-    }
+    this._addNewEntities()
+
+    const physicalEntities = [...this.squares, ...this.powerUps, ...this.players]
 
     // entity updates
-    for (let p of this.powerUps) { p.update(this.context) }
-    for (let s of this.squares) { s.update(this.context, this.players[0].sick) }
     this.timer.update(this.context)
-
+    for (let p of this.powerUps) {
+      p.update(this.context)
+    }
+    for (let s of this.squares) {
+      s.update(this.context, physicalEntities)
+    }
     // update players last
     for (let player of this.players) {
       player.update(this.context, this.squares, this.powerUps)
     }
-
-    this._physics()
   }
 
   _generateAllEntities = () => {
@@ -147,6 +142,26 @@ class EntityStore {
     return new Square(x, y, dx, dy, side, this.killSquare)
   }
 
+  _addNewEntities = () => {
+    this._addRandomSquare()
+    this._addRandomHeart()
+    if (this.timer.delta > this.timeUntilStars) {
+      this._addRandomStar()
+    }
+    if (this.timer.delta > this.timeUntilForcefields) {
+      this._addRandomForcefield()
+    }
+    if (this.timer.delta > 60 * 2 * 1000) {
+      this.players[0].crown()
+    }
+  }
+
+  _addRandomSquare = () => {
+    if (Math.random() < this.addSquareChance) {
+      this.squares.push(this._genereateOneSquare())
+    }
+  }
+
   _addRandomHeart = () => {
     if (Math.random() < this.addHeartChance) {
       this.powerUps.push(new Heart(this.killPowerup))
@@ -162,39 +177,6 @@ class EntityStore {
   _addRandomForcefield = () => {
     if (Math.random() < this.addForcefieldChance) {
       this.powerUps.push(new Forcefield(this.killPowerup))
-    }
-  }
-
-  _addRandomSquare = () => {
-    if (Math.random() < this.addSquareChance) {
-      this.squares.push(this._genereateOneSquare())
-    }
-  }
-
-  _physics = () => {
-    const entities = [...this.squares, ...this.powerUps, ...this.players]
-    entities.forEach((e1) => {
-      const others = entities.filter((e) => e.id !== e1.id)
-      others.forEach((e2) => {
-        if (overlapping(e1.getPosition(), e2.getPosition())) {
-          this._handleEntityInteraction(e1, e2)
-        }
-      })
-    })
-
-  }
-
-  _handleEntityInteraction = (e1, e2) => {
-    const x = e2.x - e1.x
-    const y = e2.y - e1.y
-    const degs = (Math.atan2(y, x) * 180 / Math.PI) % 360
-    if ((degs >= -45 && degs < 45)) {
-      if (e1.dx > 0) e1.dx = -e1.dx
-      if (e2.dx < 0) e2.dx = -e2.dx
-    }
-    else if (degs > 45 && degs <= 135) {
-      if (e1.dy > 0) e1.dy = -e1.dy
-      if (e2.dy < 0) e2.dy = -e2.dy
     }
   }
 }

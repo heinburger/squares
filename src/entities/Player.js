@@ -12,10 +12,13 @@ export default class Player {
     this.invincibleLength = 5000 // ms
     this.invincibleId = setTimeout(() => this.invincible = false, this.initialInvincibleLength)
     this.growing = 0
-    this.sick = false // used to speed up world
+    this.sick = false // <-- used to speed up squares
+    this.sickId = null
+    this.sickLength = 5000 // ms
     this.forcefield = false
     this.forcefieldLength = 7000 // ms
     this.drunk = false
+    this.drunkId = null
     this.drunkLength = 7000 // ms
     this.drunkOffsetMax = 40
     this.drunkOffsetInc = 5
@@ -80,10 +83,9 @@ export default class Player {
 
   update = (context, squares, powerUps) => {
     // do this first
-    this.sick = false
-    this._checkPowerUpInteractions(powerUps)
+    this._handlePowerUpInteractions(powerUps)
     if (!this.invincible) {
-      this._checkSquareInteractions(squares)
+      this._handleSquareInteractions(squares)
     }
     if (this.growing > 0) {
       this._grow()
@@ -127,7 +129,7 @@ export default class Player {
     this.growing++
   }
 
-  _checkSquareInteractions = (squares = []) => {
+  _handleSquareInteractions = (squares = []) => {
     squares.forEach((s, i) => {
       if (overlapping(this.getPosition(), s.getPosition())) {
         this.growing++
@@ -136,13 +138,15 @@ export default class Player {
     })
   }
 
-  _checkPowerUpInteractions = (powerUps = []) => {
+  _handlePowerUpInteractions = (powerUps = []) => {
     powerUps.forEach((p, i) => {
       if (overlapping(this.getPosition(), p.getPosition())) {
         p.kill()
         switch (p.type) {
           case 'heart':
             if (p.poison) {
+              clearTimeout(this.drunkId)
+              this.sickId = setTimeout(() => this.sick = false, p.giant ? this.sickLength * 3 : this.sickLength)
               this.sick = true
             } else if (p.giant) {
               this.growing -= 3
@@ -184,7 +188,7 @@ export default class Player {
     }
   }
 
-  _checkForIntoxication = () => {
+  _handleIntoxication = () => {
     if (this.drunk) {
       this.drunkXOffset += (this.drunkXDirection * this.drunkOffsetInc * Math.random())
       this.drunkYOffset += (this.drunkYDirection * this.drunkOffsetInc * Math.random())
@@ -205,7 +209,7 @@ export default class Player {
   }
 
   _handleMouseMove = (e) => {
-    this._checkForIntoxication()
+    this._handleIntoxication()
     const x = e.clientX - this.size / 2 + this.drunkXOffset
     const y = e.clientY - this.size / 2 - this.drunkYOffset
     this.x = x > window.innerWidth - this.size || x < 0
@@ -217,7 +221,7 @@ export default class Player {
   }
 
   _handleTouchMove = (e) => {
-    this._checkForIntoxication()
+    this._handleIntoxication()
     const touch = e.touches[0]
     const x = touch.pageX - this.size / 2
     const y = (touch.pageY - this.size / 2) - 50
