@@ -6,6 +6,7 @@ export default class Square {
   constructor (x = 0, y = 0, dx = 0, dy = 0, size = 0, kill = () => false) {
     this.id = getId()
     this.kill = () => kill(this.id)
+    this.type = 'square'
     this.hit = false
     this.windowExtension = 50
     this.x = x
@@ -48,10 +49,16 @@ export default class Square {
   }
 
   _handleEntityInteraction = (physicalEntities) => {
-    physicalEntities.forEach((e) => {
-      if (e.id !== this.id &&
-          !e.hit &&
-          overlapping(this.getPosition(), e.getPosition())) {
+    physicalEntities.forEach((e) => { // maybe a switch on type?
+      if (e.type === 'player') {
+        this.speedUpMultiplier = e.sick ? this.sickSpeedUpMultiplier : 1
+        // if (e.forcefield &&
+        //     overlapping(this.getPosition(), e.getPosition())) {
+        //
+        // }
+      } else if (e.id !== this.id &&
+                 !e.hit &&
+                 overlapping(this.getPosition(), e.getPosition())) {
         this._handleCollision(e)
       }
     })

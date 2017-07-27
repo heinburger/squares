@@ -21,7 +21,7 @@ class EntityStore {
     this.startingVelocityXMultiplier = 5
     this.startingVelocityYMultiplier = 2
     this.timeUntilStars = 30 * 1000 // ms <-- default 30s
-    this.timeUntilForcefields = 60 * 1000 // ms <-- default 60s
+    this.timeUntilForcefields = 1 * 1000 // ms <-- default 60s
     this.addHeartChance = 0.005 // <-- default 0.005
     this.addStarChance = 0.004 // <-- default 0.004
     this.addForcefieldChance = 0.003 // <-- default 0.003
@@ -91,9 +91,6 @@ class EntityStore {
     // entity updates
     for (let s of this.squares) {
       s.update(this.context, physicalEntities)
-    }
-    for (let player of this.players) {
-      player.update(this.context, this.squares, this.powerUps)
     }
   }
 

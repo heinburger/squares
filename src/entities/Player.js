@@ -5,6 +5,7 @@ export default class Player {
   constructor (kill = () => false) {
     this.id = getId()
     this.kill = kill
+    this.type = 'player'
     this.crowned = false
     this.size = 30
     this.invincible = true
